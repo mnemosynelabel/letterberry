@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Letterberry Mail Club 🪶</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Caveat:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream:      #FDF8F2;
+      --cream-mid:  #F7EDE0;
+      --cream-deep: #EFE0CC;
+      --blush:      #F0BEC9;
+      --rose:       #CC7A93;
+      --rose-deep:  #A85A73;
+      --lavender:   #C4B0D6;
+      --lilac:      #E4D8F0;
+      --ink:        #2E1F28;
+      --ink-mid:    #5A3D4A;
+      --ink-light:  #8A6A78;
+      --moss:       #9EB08E;
+      --gold:       #C4986A;
+      --gold-light: #E8D5B0;
+
+      --c-conf-bg:   #FCE8EE; --c-conf-top: #E8A0B4; --c-conf-ink: #7A2840;
+      --c-mem-bg:    #FDF2E0; --c-mem-top:  #D4A855; --c-mem-ink:  #6B4A10;
+      --c-quest-bg:  #EAF4EA; --c-quest-top:#7EB87E; --c-quest-ink:#1E4A1E;
+      --c-vic-bg:    #FFF8E8; --c-vic-top:  #C8A83C; --c-vic-ink:  #5A4200;
+      --c-oth-bg:    #EDE8F8; --c-oth-top:  #9B84CC; --c-oth-ink:  #3A2060;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Lora', serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Particles ── */
+    .particles {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .particle {
+      position: absolute; border-radius: 50%; opacity: 0;
+      animation: drift linear infinite;
+    }
+    @keyframes drift {
+      0%   { transform: translateY(105vh) scale(0); opacity: 0; }
+      8%   { opacity: 0.65; }
+      92%  { opacity: 0.2; }
+      100% { transform: translateY(-8vh) translateX(28px) scale(1.3); opacity: 0; }
+    }
+
+    /* ── Page system ── */
+    .page {
+      display: none;
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      animation: fadeIn 0.5s ease;
+    }
+    .page.active { display: flex; flex-direction: column; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Home icon */
+    .home-btn {
+      position: fixed; top: 1rem; left: 1.2rem; z-index: 200;
+      background: rgba(253,248,242,0.9);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid var(--blush);
+      border-radius: 50%; width: 42px; height: 42px;
+      display: none; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer; text-decoration: none;
+      box-shadow: 0 2px 10px rgba(46,31,40,0.08);
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .home-btn:hover { transform: scale(1.08); box-shadow: 0 4px 16px rgba(46,31,40,0.12); }
+    .home-btn.visible { display: flex; }
+
+    /* ════════════════════════════════════
+       PAGE 1 — LANDING
+    ════════════════════════════════════ */
+    #page-landing {
+      align-items: center; justify-content: center;
+      text-align: center; padding: 3rem 1.5rem;
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 15%, rgba(240,190,201,0.22) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 85%, rgba(196,176,214,0.18) 0%, transparent 60%),
+        var(--cream);
+    }
+    .landing-eyebrow {
+      font-family: 'Caveat', cursive; font-size: 1.1rem;
+      color: var(--rose); letter-spacing: 0.1em; margin-bottom: 1.6rem;
+    }
+    .landing-stamp {
+      font-size: 3.4rem; margin-bottom: 1rem;
+      animation: float 5s ease-in-out infinite;
+      filter: drop-shadow(0 4px 14px rgba(204,122,147,0.28));
+      display: block;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50%       { transform: translateY(-12px) rotate(2deg); }
+    }
+    .landing-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      font-weight: 600; color: var(--ink); line-height: 1.15;
+    }
+    .landing-title em { color: var(--rose); font-style: italic; }
+    .landing-rule {
+      display: flex; align-items: center; gap: 1rem;
+      color: var(--gold); font-size: 1rem;
+      margin: 1.6rem auto; width: fit-content;
+    }
+    .landing-rule::before, .landing-rule::after {
+      content: ''; display: block; width: 50px; height: 1px;
+    }
+    .landing-rule::before { background: linear-gradient(90deg, transparent, var(--gold)); }
+    .landing-rule::after  { background: linear-gradient(90deg, var(--gold), transparent); }
+    .landing-lore {
+      font-family: 'Lora', serif; font-style: italic;
+      font-size: 1rem; color: var(--ink-mid);
+      max-width: 480px; line-height: 2; margin: 0 auto 2.8rem;
+    }
+    .join-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'Caveat', cursive; font-size: 1.3rem;
+      color: var(--cream); background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+      padding: 0.95rem 2.8rem; border-radius: 50px;
+      border: none; cursor: pointer;
+      box-shadow: 0 4px 22px rgba(204,122,147,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .join-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(204,122,147,0.45);
+    }
+    .landing-footer-note {
+      margin-top: 2.5rem;
+      font-family: 'Caveat', cursive; font-size: 0.95rem;
+      color: var(--ink-light); opacity: 0.7;
+    }
+
+    /* ════════════════════════════════════
+       PAGE 2 — WELCOME MOMENT
+    ════════════════════════════════════ */
+    #page-welcome {
+      align-items: center; justify-content: center;
+      text-align: center; padding: 3rem 1.5rem;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(228,216,240,0.3) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 40% at 30% 70%, rgba(240,190,201,0.2) 0%, transparent 55%),
+        var(--cream);
+      cursor: pointer;
+    }
+    .welcome-sparkle {
+      font-size: 3rem; margin-bottom: 1.4rem; display: block;
+      animation: sparkle 2.5s ease-in-out infinite;
+    }
+    @keyframes sparkle {
+      0%, 100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+      50%       { transform: scale(1.15) rotate(8deg); filter: brightness(1.2); }
+    }
+    .welcome-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-style: italic; color: var(--rose);
+      margin-bottom: 0.8rem; line-height: 1.2;
+    }
+    .welcome-sub {
+      font-family: 'Lora', serif; font-style: italic;
+      font-size: 1rem; color: var(--ink-mid);
+      max-width: 380px; margin: 0 auto 2.4rem; line-height: 1.9;
+    }
+    .welcome-berryfolk {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      color: var(--ink); margin-bottom: 0.5rem;
+    }
+    .welcome-berryfolk span { color: var(--rose); font-style: italic; }
+    .welcome-tap {
+      font-family: 'Caveat', cursive; font-size: 1rem;
+      color: var(--ink-light); opacity: 0.6; margin-top: 3rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 0.8; }
+    }
+    .welcome-petals {
+      font-size: 1.8rem; margin: 1.5rem 0;
+      letter-spacing: 0.8rem; display: block;
+    }
+
+    /* ════════════════════════════════════
+       PAGE 3 — HUB
+    ════════════════════════════════════ */
+    #page-hub {
+      align-items: center; justify-content: center;
+      padding: 3rem 1.5rem;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 20%, rgba(240,190,201,0.15) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 35% at 80% 80%, rgba(196,176,214,0.15) 0%, transparent 55%),
+        var(--cream);
+      text-align: center;
+    }
+    .hub-eyebrow {
+      font-family: 'Caveat', cursive; font-size: 1rem;
+      color: var(--rose); letter-spacing: 0.12em; margin-bottom: 0.6rem;
+    }
+    .hub-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      color: var(--ink); margin-bottom: 0.5rem;
+    }
+    .hub-sub {
+      font-family: 'Lora', serif; font-style: italic;
+      font-size: 0.92rem; color: var(--ink-light);
+      margin-bottom: 3rem; max-width: 360px; margin-left: auto; margin-right: auto;
+    }
+    .hub-doors {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem;
+      max-width: 640px; width: 100%; margin: 0 auto;
+    }
+    .door {
+      background: #FFFCF7;
+      border: 1.5px solid var(--cream-deep);
+      border-radius: 16px; padding: 2.4rem 1.6rem 2rem;
+      cursor: pointer; text-align: center;
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+      box-shadow: 0 2px 12px rgba(46,31,40,0.05);
+      position: relative; overflow: hidden;
+    }
+    .door::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+      transition: opacity 0.2s;
+    }
+    .door-write::before  { background: linear-gradient(90deg, var(--blush), var(--lavender)); }
+    .door-board::before  { background: linear-gradient(90deg, var(--lavender), var(--blush)); }
+    .door:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(46,31,40,0.10);
+      border-color: var(--blush);
+    }
+    .door-icon {
+      font-size: 2.8rem; display: block;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 2px 6px rgba(46,31,40,0.12));
+    }
+    .door-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; color: var(--ink); margin-bottom: 0.5rem;
+    }
+    .door-desc {
+      font-family: 'Lora', serif; font-style: italic;
+      font-size: 0.85rem; color: var(--ink-light); line-height: 1.7;
+    }
+    .hub-rule {
+      margin-top: 3rem;
+      font-family: 'Caveat', cursive; font-size: 0.9rem;
+      color: var(--ink-light); opacity: 0.5;
+    }
+
+    /* ════════════════════════════════════
+       PAGE 4 — SUBMIT
+    ════════════════════════════════════ */
+    #page-submit {
+      justify-content: flex-start;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(228,216,240,0.18) 0%, transparent 60%),
+        var(--cream);
+    }
+    .inner-header {
+      width: 100%; padding: 1.1rem 1.5rem 1.1rem 4.5rem;
+      border-bottom: 1px solid var(--cream-deep);
+      background: rgba(253,248,242,0.95);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .inner-header-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 1.05rem; color: var(--rose);
+    }
+    .inner-content {
+      flex: 1; padding: 2.5rem 1.5rem 3rem;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .section-eyebrow {
+      font-family: 'Caveat', cursive; font-size: 0.95rem;
+      color: var(--rose); letter-spacing: 0.12em;
+      margin-bottom: 0.4rem; text-align: center;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; color: var(--ink);
+      text-align: center; margin-bottom: 0.4rem;
+    }
+    .section-sub {
+      font-family: 'Lora', serif; font-style: italic;
+      font-size: 0.88rem; color: var(--ink-light);
+      margin-bottom: 2.2rem; text-align: center;
+    }
+
+    /* Envelope form */
+    .envelope {
+      width: 100%; max-width: 560px;
+      background: #FFFCF7;
+      border-radius: 2px 2px 14px 14px;
+      box-shadow:
+        0 2px 0 var(--blush),
+        0 12px 40px rgba(46,31,40,0.08);
+      overflow: hidden;
+    }
+    .envelope-flap {
+      height: 56px;
+      background: linear-gradient(135deg, var(--blush) 0%, var(--lavender) 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .envelope-flap::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, transparent 49%, rgba(255,255,255,0.12) 49%);
+    }
+    .envelope-seal {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, var(--rose), var(--rose-deep));
+      box-shadow: 0 2px 8px rgba(168,90,115,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; z-index: 1;
+    }
+    .envelope-body { padding: 2rem 2.2rem 1.8rem; }
+
+    .form-group { margin-bottom: 1.4rem; }
+    label {
+      display: block; font-family: 'Caveat', cursive; font-size: 1rem;
+      color: var(--ink-mid); margin-bottom: 0.4rem;
+    }
+    input[type="text"], textarea {
+      width: 100%; background: var(--cream-mid);
+      border: 1.5px solid var(--cream-deep); border-radius: 8px;
+      padding: 0.72rem 1rem; font-family: 'Lora', serif;
+      font-size: 0.92rem; color: var(--ink); outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--rose);
+      box-shadow: 0 0 0 3px rgba(204,122,147,0.12);
+      background: #FFFCF7;
+    }
+    textarea { resize: vertical; min-height: 130px; line-height: 1.8; }
+
+    /* Category pills */
+    .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .cat-radio { display: none; }
+    .cat-pill {
+      display: flex; align-items: center; gap: 0.45rem;
+      padding: 0.55rem 0.9rem; border-radius: 50px;
+      border: 1.5px solid var(--cream-deep);
+      background: var(--cream-mid); cursor: pointer;
+      font-family: 'Caveat', cursive; font-size: 1rem;
+      color: var(--ink-mid); transition: all 0.18s; user-select: none;
+    }
+    .cat-pill:hover { border-color: var(--rose); color: var(--ink); background: var(--cream); }
+    #cat-confession:checked + .cat-pill  { background: var(--c-conf-bg);  border-color: var(--c-conf-top);  color: var(--c-conf-ink);  font-weight: 600; }
+    #cat-memory:checked     + .cat-pill  { background: var(--c-mem-bg);   border-color: var(--c-mem-top);   color: var(--c-mem-ink);   font-weight: 600; }
+    #cat-question:checked   + .cat-pill  { background: var(--c-quest-bg); border-color: var(--c-quest-top); color: var(--c-quest-ink); font-weight: 600; }
+    #cat-victories:checked  + .cat-pill  { background: var(--c-vic-bg);   border-color: var(--c-vic-top);   color: var(--c-vic-ink);   font-weight: 600; }
+    #cat-others:checked     + .cat-pill  { background: var(--c-oth-bg);   border-color: var(--c-oth-top);   color: var(--c-oth-ink);   font-weight: 600; }
+    .cat-span2 { grid-column: span 2; justify-content: center; }
+
+    /* Pledge */
+    .pledge {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      background: var(--lilac); border-radius: 10px; padding: 0.9rem 1rem;
+    }
+    .pledge input[type="checkbox"] {
+      width: 16px; height: 16px; margin-top: 3px;
+      accent-color: var(--rose); flex-shrink: 0; cursor: pointer;
+    }
+    .pledge p {
+      font-family: 'Lora', serif; font-style: italic;
+      font-size: 0.86rem; color: var(--ink-mid); line-height: 1.65;
+    }
+
+    /* Seal button */
+    .seal-btn {
+      display: block; width: 100%; margin-top: 1.6rem; padding: 0.95rem;
+      background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+      color: var(--cream); font-family: 'Caveat', cursive; font-size: 1.25rem;
+      border: none; border-radius: 50px; cursor: pointer;
+      box-shadow: 0 4px 18px rgba(168,90,115,0.35);
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .seal-btn:hover  { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(168,90,115,0.4); }
+    .seal-btn:active { transform: scale(0.98); }
+    .seal-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    /* Toasts */
+    .toast {
+      display: none; align-items: center; gap: 0.5rem;
+      margin-top: 0.9rem; padding: 0.75rem 1rem; border-radius: 8px;
+      font-family: 'Caveat', cursive; font-size: 1rem;
+    }
+    .toast.ok  { background: var(--c-quest-bg); color: var(--c-quest-ink); border: 1px solid var(--c-quest-top); }
+    .toast.err { background: var(--c-conf-bg);  color: var(--c-conf-ink);  border: 1px solid var(--c-conf-top); }
+    .toast.show { display: flex; }
+
+    /* ════════════════════════════════════
+       PAGE 5 — BOARD
+    ════════════════════════════════════ */
+    #page-board {
+      justify-content: flex-start;
+      background:
+        radial-gradient(ellipse 100% 35% at 50% 0%, rgba(240,190,201,0.12) 0%, transparent 55%),
+        var(--cream-mid);
+    }
+    .board-content { flex: 1; padding: 2.5rem 1.2rem 3rem; }
+
+    /* Filter tabs */
+    .filter-row {
+      display: flex; flex-wrap: wrap; gap: 0.45rem;
+      justify-content: center; margin-bottom: 2.5rem;
+    }
+    .f-btn {
+      font-family: 'Caveat', cursive; font-size: 0.95rem;
+      padding: 0.4rem 1.1rem; border-radius: 50px;
+      border: 1.5px solid var(--cream-deep);
+      background: var(--cream); color: var(--ink-mid);
+      cursor: pointer; transition: all 0.18s;
+    }
+    .f-btn:hover, .f-btn.on {
+      background: var(--blush); border-color: var(--rose); color: var(--ink);
+    }
+
+    /* Masonry wall */
+    .letters-wall { columns: 3 240px; gap: 1rem; max-width: 1060px; margin: 0 auto; }
+
+    /* Letter card */
+    .lc {
+      break-inside: avoid; margin-bottom: 1rem;
+      border-radius: 10px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(46,31,40,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .lc:hover {
+      transform: translateY(-4px) rotate(0.3deg);
+      box-shadow: 0 10px 26px rgba(46,31,40,0.11);
+    }
+    .lc-stripe { height: 5px; }
+    .lc.confession  { background: var(--c-conf-bg); }
+    .lc.memory      { background: var(--c-mem-bg);  }
+    .lc.question    { background: var(--c-quest-bg);}
+    .lc.victories   { background: var(--c-vic-bg);  }
+    .lc.others      { background: var(--c-oth-bg);  }
+    .lc.confession  .lc-stripe { background: linear-gradient(90deg, var(--c-conf-top),  #F5A8BE); }
+    .lc.memory      .lc-stripe { background: linear-gradient(90deg, var(--c-mem-top),   #E8C87A); }
+    .lc.question    .lc-stripe { background: linear-gradient(90deg, var(--c-quest-top), #A8D4A8); }
+    .lc.victories   .lc-stripe { background: linear-gradient(90deg, var(--c-vic-top),   #E8D870); }
+    .lc.others      .lc-stripe { background: linear-gradient(90deg, var(--c-oth-top),   #C4B0E8); }
+    .lc-body { padding: 1.1rem 1.2rem 0.9rem; }
+    .lc-tag {
+      font-family: 'Caveat', cursive; font-size: 0.88rem;
+      margin-bottom: 0.55rem; opacity: 0.72; display: block;
+    }
+    .confession  .lc-tag { color: var(--c-conf-ink);  }
+    .memory      .lc-tag { color: var(--c-mem-ink);   }
+    .question    .lc-tag { color: var(--c-quest-ink); }
+    .victories   .lc-tag { color: var(--c-vic-ink);   }
+    .others      .lc-tag { color: var(--c-oth-ink);   }
+    .lc-msg {
+      font-family: 'Lora', serif; font-size: 0.9rem;
+      line-height: 1.78; color: var(--ink); margin-bottom: 0.9rem;
+    }
+    .lc-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid rgba(46,31,40,0.07); padding-top: 0.6rem;
+    }
+    .lc-name { font-family: 'Caveat', cursive; font-size: 0.95rem; font-weight: 600; }
+    .confession  .lc-name { color: var(--c-conf-ink);  }
+    .memory      .lc-name { color: var(--c-mem-ink);   }
+    .question    .lc-name { color: var(--c-quest-ink); }
+    .victories   .lc-name { color: var(--c-vic-ink);   }
+    .others      .lc-name { color: var(--c-oth-ink);   }
+    .lc-date {
+      font-family: 'Caveat', cursive; font-size: 0.8rem;
+      color: var(--ink-light); opacity: 0.6;
+    }
+    .board-empty {
+      text-align: center; font-family: 'Caveat', cursive;
+      font-size: 1.15rem; color: var(--ink-light); padding: 4rem 0;
+    }
+
+    /* ── Shared footer ── */
+    .page-footer {
+      text-align: center; padding: 1.5rem;
+      font-family: 'Caveat', cursive; font-size: 0.9rem;
+      color: var(--ink-light); border-top: 1px solid var(--cream-deep);
+      background: var(--cream); opacity: 0.8;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      .hub-doors { grid-template-columns: 1fr; max-width: 320px; }
+      .door { padding: 2rem 1.4rem 1.6rem; }
+      .envelope-body { padding: 1.6rem 1.2rem 1.4rem; }
+      .letters-wall { columns: 1; }
+      .filter-row { gap: 0.35rem; }
+      .f-btn { font-size: 0.88rem; padding: 0.35rem 0.9rem; }
+      .inner-content { padding: 2rem 1rem 2.5rem; }
+    }
+    @media (min-width: 601px) and (max-width: 900px) {
+      .hub-doors { grid-template-columns: 1fr 1fr; max-width: 500px; }
+      .letters-wall { columns: 2 200px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .particle, .landing-stamp, .welcome-sparkle, .welcome-tap { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Home button (shown on inner pages) -->
+<button class="home-btn" id="home-btn" onclick="goHome()" title="Back to the post house">🏡</button>
+
+<!-- ════════ PAGE 1: LANDING ════════ -->
+<div class="page active" id="page-landing">
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 3rem 1.5rem; text-align:center;
+    background: radial-gradient(ellipse 70% 50% at 15% 15%, rgba(240,190,201,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 85%, rgba(196,176,214,0.18) 0%, transparent 60%),
+    var(--cream);">
+    <p class="landing-eyebrow">✦ est. beyond the hedgerows of Wrenberry Fields ✦</p>
+    <span class="landing-stamp">🍓</span>
+    <h1 class="landing-title">The <em>Letterberry</em><br>Mail Club</h1>
+    <div class="landing-rule">ᝰ 🪶 ᝰ</div>
+    <p class="landing-lore">
+      Beyond the hedgerows of the Wrenberry Fields stands a humble post house,
+      where kind-hearted fairies gather to write letters of wonder, friendship,
+      and quiet enchantment. Where every sealed envelope carries a pocketful of warmth.
+    </p>
+    <button class="join-btn" onclick="goTo('page-welcome')">🍓 Join the Club</button>
+    <p class="landing-footer-note">A place for berryfolks to leave a little warmth ✦</p>
+  </div>
+  <div class="page-footer">Letterberry Mail Club &nbsp;·&nbsp; Beyond the Wrenberry Fields</div>
+</div>
+
+<!-- ════════ PAGE 2: WELCOME MOMENT ════════ -->
+<div class="page" id="page-welcome" onclick="goTo('page-hub')">
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:3rem 1.5rem; text-align:center;">
+    <span class="welcome-sparkle">✨</span>
+    <p class="welcome-title">Welcome,</p>
+    <p class="welcome-berryfolk">dear <span>berryfolk</span> 🍓</p>
+    <span class="welcome-petals">🌸 🌿 🌸</span>
+    <p class="welcome-sub">
+      The post house doors are open.<br>
+      Your letters are safe here.<br>
+      Come as you are.
+    </p>
+    <p class="welcome-tap">tap anywhere to continue ✦</p>
+  </div>
+  <div class="page-footer">Letterberry Mail Club &nbsp;·&nbsp; Beyond the Wrenberry Fields</div>
+</div>
+
+<!-- ════════ PAGE 3: HUB ════════ -->
+<div class="page" id="page-hub">
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:3rem 1.5rem;
+    background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(240,190,201,0.15) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 80% 80%, rgba(196,176,214,0.15) 0%, transparent 55%), var(--cream);">
+    <p class="hub-eyebrow">✦ the post house ✦</p>
+    <h2 class="hub-title">What brings you here today?</h2>
+    <p class="hub-sub">The post house is open, berryfolk. Step right in. 🪶</p>
+
+    <div class="hub-doors">
+      <div class="door door-write" onclick="goTo('page-submit')">
+        <span class="door-icon">💌</span>
+        <div class="door-title">Drop a Letter</div>
+        <div class="door-desc">Leave a confession, a memory, a question, or a little victory for the board.</div>
+      </div>
+      <div class="door door-board" onclick="goTo('page-board')">
+        <span class="door-icon">📬</span>
+        <div class="door-title">Post House Board</div>
+        <div class="door-desc">Read letters left by fellow berryfolks from across the Wrenberry Fields.</div>
+      </div>
+    </div>
+
+    <p class="hub-rule">✦ · · · ✦ · · · ✦</p>
+  </div>
+  <div class="page-footer">Letterberry Mail Club &nbsp;·&nbsp; Beyond the Wrenberry Fields</div>
+</div>
+
+<!-- ════════ PAGE 4: SUBMIT ════════ -->
+<div class="page" id="page-submit">
+  <div class="inner-header">
+    <span class="inner-header-title">🪶 Drop a Letter</span>
+  </div>
+  <div class="inner-content">
+    <p class="section-eyebrow">✦ for the berryfolks ✦</p>
+    <h2 class="section-title">Write a Letter</h2>
+    <p class="section-sub">Every letter finds its way to the board. Be kind, be soft, be you.</p>
+
+    <div class="envelope">
+      <div class="envelope-flap">
+        <div class="envelope-seal">🌸</div>
+      </div>
+      <div class="envelope-body">
+        <div class="form-group">
+          <label for="pen-name">✦ Your pen name <span style="font-size:0.82rem;opacity:0.55">(optional)</span></label>
+          <input type="text" id="pen-name" placeholder="A Wandering Berryfolk" maxlength="40" />
+        </div>
+
+        <div class="form-group">
+          <label>✦ What kind of letter is this?</label>
+          <div class="cat-grid">
+            <input type="radio" name="cat" id="cat-confession" value="💌 Confession" class="cat-radio" />
+            <label for="cat-confession" class="cat-pill">💌 Confession</label>
+
+            <input type="radio" name="cat" id="cat-memory" value="🍂 Memory" class="cat-radio" />
+            <label for="cat-memory" class="cat-pill">🍂 Memory</label>
+
+            <input type="radio" name="cat" id="cat-question" value="🌿 Question" class="cat-radio" />
+            <label for="cat-question" class="cat-pill">🌿 Question</label>
+
+            <input type="radio" name="cat" id="cat-victories" value="🌟 Small Victories" class="cat-radio" />
+            <label for="cat-victories" class="cat-pill">🌟 Small Victories</label>
+
+            <input type="radio" name="cat" id="cat-others" value="🍓 Others" class="cat-radio" />
+            <label for="cat-others" class="cat-pill cat-span2">🍓 Others</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">✦ Your letter</label>
+          <textarea id="message" placeholder="Write your heart out, dear berryfolk…" maxlength="600"></textarea>
+        </div>
+
+        <div class="form-group">
+          <div class="pledge">
+            <input type="checkbox" id="pledge" />
+            <p>I promise this letter carries only kindness — no hate, no harm, only warmth and wonder. 🌸</p>
+          </div>
+        </div>
+
+        <button class="seal-btn" id="send-btn" onclick="submitLetter()">
+          💌 Seal &amp; Send
+        </button>
+
+        <div class="toast ok"  id="t-ok">✨ Your letter has been sealed and sent to the board!</div>
+        <div class="toast err" id="t-err">🍂 Something went wrong — please try again.</div>
+        <div class="toast err" id="t-pledge">🌸 Please make the kindness pledge first.</div>
+        <div class="toast err" id="t-cat">💌 Please choose a category for your letter.</div>
+        <div class="toast err" id="t-msg">🪶 Your letter is empty — write something first.</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">Letterberry Mail Club &nbsp;·&nbsp; Beyond the Wrenberry Fields</div>
+</div>
+
+<!-- ════════ PAGE 5: BOARD ════════ -->
+<div class="page" id="page-board">
+  <div class="inner-header">
+    <span class="inner-header-title">📬 Post House Board</span>
+  </div>
+  <div class="board-content">
+    <p class="section-eyebrow" style="text-align:center; margin-bottom:0.3rem;">✦ from the berryfolks ✦</p>
+    <h2 class="section-title" style="text-align:center; margin-bottom:0.3rem;">Letters from the Fields</h2>
+    <p class="section-sub" style="text-align:center; margin-bottom:1.8rem;">Warm words left by berryfolks across Wrenberry Fields 🌿</p>
+
+    <div class="filter-row">
+      <button class="f-btn on"  onclick="filter('all',this)">🌸 All</button>
+      <button class="f-btn" onclick="filter('💌 Confession',this)">💌 Confessions</button>
+      <button class="f-btn" onclick="filter('🍂 Memory',this)">🍂 Memories</button>
+      <button class="f-btn" onclick="filter('🌿 Question',this)">🌿 Questions</button>
+      <button class="f-btn" onclick="filter('🌟 Small Victories',this)">🌟 Small Victories</button>
+      <button class="f-btn" onclick="filter('🍓 Others',this)">🍓 Others</button>
+    </div>
+
+    <div class="letters-wall" id="wall">
+      <div class="board-empty">🍓 Fetching letters from the post house…</div>
+    </div>
+  </div>
+  <div class="page-footer">Letterberry Mail Club &nbsp;·&nbsp; Beyond the Wrenberry Fields</div>
+</div>
+
+<script>
+  /* ── CONFIG ── */
+  const SUPABASE_URL  = 'https://tlpagwwdctnulmybmukg.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRscGFnd3dkY3RudWxteWJtdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1NTUxMjIsImV4cCI6MjEwMDEzMTEyMn0.AosUNkKf4--QTY6aEn0t09JlFvdsr10KK537nCnykOE';
+  const H = {
+    'Content-Type':  'application/json',
+    'apikey':        SUPABASE_ANON,
+    'Authorization': `Bearer ${SUPABASE_ANON}`,
+  };
+
+  /* ── Fairy dust ── */
+  const COLORS = ['#F0BEC9','#C4B0D6','#F5E6C8','#D4E6D0','#C4986A'];
+  const pc = document.getElementById('particles');
+  for (let i = 0; i < 26; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const sz = 2 + Math.random() * 5;
+    p.style.cssText = `left:${Math.random()*100}%;width:${sz}px;height:${sz}px;
+      background:${COLORS[~~(Math.random()*COLORS.length)]};
+      animation-duration:${9+Math.random()*15}s;
+      animation-delay:${Math.random()*15}s;`;
+    pc.appendChild(p);
+  }
+
+  /* ── Page navigation ── */
+  const INNER = ['page-submit','page-board'];
+
+  function goTo(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+    const homeBtn = document.getElementById('home-btn');
+    homeBtn.classList.toggle('visible', INNER.includes(id));
+    if (id === 'page-board') loadLetters();
+  }
+
+  function goHome() { goTo('page-hub'); }
+
+  /* ── Submit ── */
+  async function submitLetter() {
+    hideToasts();
+    const penName  = document.getElementById('pen-name').value.trim() || 'A Wandering Berryfolk';
+    const category = document.querySelector('input[name="cat"]:checked')?.value;
+    const message  = document.getElementById('message').value.trim();
+    const pledge   = document.getElementById('pledge').checked;
+    const btn      = document.getElementById('send-btn');
+
+    if (!pledge)   { toast('t-pledge'); return; }
+    if (!category) { toast('t-cat');    return; }
+    if (!message)  { toast('t-msg');    return; }
+
+    btn.disabled = true;
+    btn.textContent = '💌 Sealing your letter…';
+
+    try {
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/letters`, {
+        method: 'POST', headers: H,
+        body: JSON.stringify({ pen_name: penName, category, message }),
+      });
+      if (!r.ok) throw new Error();
+      toast('t-ok');
+      document.getElementById('pen-name').value = '';
+      document.getElementById('message').value  = '';
+      document.getElementById('pledge').checked  = false;
+      document.querySelectorAll('input[name="cat"]').forEach(r => r.checked = false);
+    } catch {
+      toast('t-err');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '💌 Seal &amp; Send';
+    }
+  }
+
+  /* ── Board ── */
+  let ALL = [], FILT = 'all';
+
+  async function loadLetters() {
+    document.getElementById('wall').innerHTML =
+      '<div class="board-empty">🍓 Fetching letters from the post house…</div>';
+    try {
+      const r = await fetch(
+        `${SUPABASE_URL}/rest/v1/letters?select=*&order=created_at.desc&limit=150`,
+        { headers: H }
+      );
+      ALL = await r.json();
+      render();
+    } catch {
+      document.getElementById('wall').innerHTML =
+        '<div class="board-empty">🍂 Could not reach the post house. Try again soon.</div>';
+    }
+  }
+
+  function render() {
+    const wall = document.getElementById('wall');
+    const list = FILT === 'all' ? ALL : ALL.filter(l => l.category === FILT);
+    if (!list.length) {
+      wall.innerHTML = '<div class="board-empty">🌿 No letters here yet — be the first to write!</div>';
+      return;
+    }
+    wall.innerHTML = list.map(l => {
+      const cls = catCls(l.category);
+      return `<div class="lc ${cls}">
+        <div class="lc-stripe"></div>
+        <div class="lc-body">
+          <span class="lc-tag">${esc(l.category)}</span>
+          <div class="lc-msg">${esc(l.message)}</div>
+          <div class="lc-footer">
+            <span class="lc-name">— ${esc(l.pen_name)}</span>
+            <span class="lc-date">${fmt(l.created_at)}</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function filter(cat, btn) {
+    FILT = cat;
+    document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    render();
+  }
+
+  /* ── Helpers ── */
+  function catCls(c) {
+    if (c.includes('Confession'))      return 'confession';
+    if (c.includes('Memory'))          return 'memory';
+    if (c.includes('Question'))        return 'question';
+    if (c.includes('Small Victories')) return 'victories';
+    return 'others';
+  }
+  function fmt(iso) {
+    return new Date(iso).toLocaleDateString('en-US',
+      { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+  function esc(s) {
+    return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function toast(id) {
+    document.getElementById(id)?.classList.add('show');
+    setTimeout(() => document.getElementById(id)?.classList.remove('show'), 4200);
+  }
+  function hideToasts() {
+    document.querySelectorAll('.toast').forEach(t => t.classList.remove('show'));
+  }
+</script>
+</body>
+</html>
