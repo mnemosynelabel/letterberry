@@ -86,6 +86,33 @@
     .home-btn:hover { transform: scale(1.08); box-shadow: 0 4px 16px rgba(46,31,40,0.12); }
     .home-btn.visible { display: flex; }
 
+    /* ── Music toggle ── */
+    .music-btn {
+      position: fixed; top: 1rem; right: 1.2rem; z-index: 200;
+      background: rgba(253,248,242,0.9);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid var(--blush);
+      border-radius: 50px;
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.45rem 0.9rem;
+      font-family: 'Caveat', cursive; font-size: 0.95rem;
+      color: var(--ink-mid); cursor: pointer;
+      box-shadow: 0 2px 10px rgba(46,31,40,0.08);
+      transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+      opacity: 0; pointer-events: none;
+    }
+    .music-btn.visible { opacity: 1; pointer-events: all; }
+    .music-btn:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(46,31,40,0.12); }
+    .music-btn.playing { background: var(--lilac); border-color: var(--lavender); }
+    .music-icon { font-size: 1rem; transition: transform 0.3s; }
+    .music-btn.playing .music-icon { animation: spin 3s linear infinite; }
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .music-label { font-size: 0.88rem; max-width: 120px; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap; }
+
     /* ════════════════════════════════════
        PAGE 1 — LANDING
     ════════════════════════════════════ */
@@ -539,6 +566,12 @@
 <!-- Home button (shown on inner pages) -->
 <button class="home-btn" id="home-btn" onclick="goHome()" title="Back to the post house">🏡</button>
 
+<!-- Music toggle -->
+<button class="music-btn" id="music-btn" onclick="toggleMusic()" title="Toggle music">
+  <span class="music-icon" id="music-icon">🎵</span>
+  <span class="music-label" id="music-label">Now playing</span>
+</button>
+
 <!-- ════════ PAGE 1: LANDING ════════ -->
 <div class="page active" id="page-landing">
   <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 3rem 1.5rem; text-align:center;
@@ -554,7 +587,7 @@
       where kind-hearted fairies gather to write letters of wonder, friendship,
       and quiet enchantment. Where every sealed envelope carries a pocketful of warmth.
     </p>
-    <button class="join-btn" onclick="goTo('page-welcome')">🍓 Join the Club</button>
+    <button class="join-btn" onclick="initMusic(); goTo('page-welcome')">🍓 Join the Club</button>
     <p class="landing-footer-note">A place for berryfolks to leave a little warmth ✦</p>
   </div>
   <div class="page-footer">Letterberry Mail Club &nbsp;·&nbsp; Beyond the Wrenberry Fields</div>
@@ -721,6 +754,65 @@
     pc.appendChild(p);
   }
 
+  /* ── Music ── */
+  const TRACKS = [
+    { file: '03.%20Dear%2C%20My%20Feelings.mp3',  name: 'Dear, My Feelings' },
+    { file: '03.%20IVE%20-%20Either%20Way.mp3',    name: 'Either Way' },
+    { file: '06.%20Midnight%20Kiss.mp3',            name: 'Midnight Kiss' },
+    { file: '06.%20Mine.mp3',                       name: 'Mine' },
+    { file: 'DARE%20ME.mp3',                        name: 'Dare Me' },
+  ];
+  const BASE = 'https://raw.githubusercontent.com/mnemosynelabel/letterberry/main/music/';
+
+  // Shuffle array
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = ~~(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  let playlist = shuffle(TRACKS);
+  let trackIdx = 0;
+  let audio    = null;
+  let started  = false;
+
+  function initMusic() {
+    if (started) return;
+    started = true;
+    audio = new Audio();
+    audio.volume = 0.5;
+    audio.addEventListener('ended', nextTrack);
+    playTrack(0);
+    document.getElementById('music-btn').classList.add('visible', 'playing');
+  }
+
+  function playTrack(idx) {
+    trackIdx = idx % playlist.length;
+    audio.src = BASE + playlist[trackIdx].file;
+    audio.play().catch(() => {});
+    document.getElementById('music-label').textContent = playlist[trackIdx].name;
+  }
+
+  function nextTrack() {
+    if (trackIdx + 1 >= playlist.length) playlist = shuffle(TRACKS);
+    playTrack(trackIdx + 1);
+  }
+
+  function toggleMusic() {
+    if (!audio) return;
+    const btn = document.getElementById('music-btn');
+    if (audio.paused) {
+      audio.play();
+      btn.classList.add('playing');
+    } else {
+      audio.pause();
+      btn.classList.remove('playing');
+    }
+  }
+
   /* ── Page navigation ── */
   const INNER = ['page-submit','page-board'];
 
@@ -730,6 +822,9 @@
     window.scrollTo(0, 0);
     const homeBtn = document.getElementById('home-btn');
     homeBtn.classList.toggle('visible', INNER.includes(id));
+    // Show music btn everywhere except landing
+    document.getElementById('music-btn').classList.toggle('visible',
+      id !== 'page-landing' && started);
     if (id === 'page-board') loadLetters();
   }
 
