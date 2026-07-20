@@ -693,7 +693,17 @@
           💌 Seal &amp; Send
         </button>
 
-        <div class="toast ok"  id="t-ok">✨ Your letter has been sealed and sent to the board!</div>
+        <div class="toast ok"  id="t-ok">
+          <span>✨ Your letter has been sealed and sent!</span>
+          <button onclick="goTo('page-board')" style="
+            margin-left:auto; flex-shrink:0;
+            font-family:'Caveat',cursive; font-size:0.95rem;
+            background:var(--c-quest-top); color:#fff;
+            border:none; border-radius:50px;
+            padding:0.3rem 0.9rem; cursor:pointer;
+            white-space:nowrap;
+          ">Visit the Board →</button>
+        </div>
         <div class="toast err" id="t-err">🍂 Something went wrong — please try again.</div>
         <div class="toast err" id="t-pledge">🌸 Please make the kindness pledge first.</div>
         <div class="toast err" id="t-cat">💌 Please choose a category for your letter.</div>
@@ -932,7 +942,8 @@
   }
   function toast(id) {
     document.getElementById(id)?.classList.add('show');
-    setTimeout(() => document.getElementById(id)?.classList.remove('show'), 4200);
+    const duration = id === 't-ok' ? 8000 : 4200;
+    setTimeout(() => document.getElementById(id)?.classList.remove('show'), duration);
   }
   function hideToasts() {
     document.querySelectorAll('.toast').forEach(t => t.classList.remove('show'));
