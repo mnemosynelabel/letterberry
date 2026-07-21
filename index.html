@@ -436,7 +436,95 @@
     .toast.err { background: var(--c-conf-bg);  color: var(--c-conf-ink);  border: 1px solid var(--c-conf-top); }
     .toast.show { display: flex; }
 
-    /* ── Modal ── */
+    /* ── Rules modal ── */
+    .rules-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'Lora', serif; font-style: italic; font-size: 0.85rem;
+      color: var(--ink-light); background: transparent;
+      border: 1.5px solid var(--cream-deep); border-radius: 50px;
+      padding: 0.45rem 1.1rem; cursor: pointer; margin-top: 1.4rem;
+      transition: border-color 0.18s, color 0.18s;
+    }
+    .rules-btn:hover { border-color: var(--rose); color: var(--rose); }
+
+    .rules-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(46,31,40,0.45); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 1.5rem;
+      animation: fadeIn 0.3s ease;
+    }
+    .rules-overlay.show { display: flex; }
+    .rules-letter {
+      background: #FFFCF7; border-radius: 4px 4px 14px 14px;
+      max-width: 460px; width: 100%;
+      box-shadow: 0 20px 60px rgba(46,31,40,0.2);
+      overflow: hidden; animation: modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+    }
+    .rules-letter::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 200px 200px; opacity: 0.04; mix-blend-mode: multiply;
+    }
+    .rules-flap {
+      height: 48px;
+      background: linear-gradient(135deg, var(--blush), var(--lavender));
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1;
+    }
+    .rules-flap::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, transparent 49%, rgba(255,255,255,0.1) 49%);
+    }
+    .rules-wax {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, var(--rose), var(--rose-deep));
+      box-shadow: 0 2px 8px rgba(168,90,115,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; z-index: 1;
+    }
+    .rules-body { padding: 1.8rem 2rem 2rem; position: relative; z-index: 1; }
+    .rules-title {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 1.25rem; color: var(--rose); text-align: center; margin-bottom: 0.4rem;
+    }
+    .rules-intro {
+      font-family: 'Lora', serif; font-style: italic;
+      font-size: 0.84rem; color: var(--ink-mid); text-align: center;
+      line-height: 1.7; margin-bottom: 1.4rem;
+    }
+    .rules-divider { text-align: center; font-size: 0.9rem; color: var(--blush); letter-spacing: 0.4rem; margin-bottom: 1.2rem; }
+    .rules-list { list-style: none; margin-bottom: 1.6rem; }
+    .rules-list li {
+      font-family: 'Lora', serif; font-size: 0.86rem;
+      color: var(--ink-mid); line-height: 1.7;
+      padding: 0.6rem 0; border-bottom: 1px solid var(--cream-deep);
+      display: flex; gap: 0.7rem; align-items: flex-start;
+    }
+    .rules-list li:last-child { border-bottom: none; }
+    .rules-list li span.ri { flex-shrink: 0; font-size: 1rem; margin-top: 0.05rem; }
+    .rules-outro {
+      font-family: 'Lora', serif; font-style: italic;
+      font-size: 0.82rem; color: var(--ink-light);
+      text-align: center; line-height: 1.7; margin-bottom: 1.4rem;
+    }
+    .rules-close {
+      display: block; width: 100%; padding: 0.8rem;
+      background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+      color: var(--cream); font-family: 'Caveat', cursive; font-size: 1.15rem;
+      border: none; border-radius: 50px; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(168,90,115,0.3);
+      transition: transform 0.18s;
+    }
+    .rules-close:hover { transform: translateY(-2px); }
+
+    /* ── Rules modal ── */
+  function openRules() { document.getElementById('rules-modal').classList.add('show'); }
+  function closeRules(e) { if (e.target === document.getElementById('rules-modal')) closeRulesDirect(); }
+  function closeRulesDirect() { document.getElementById('rules-modal').classList.remove('show'); }
+
+  /* ── Modal ── */
     .modal-overlay {
       display: none; position: fixed; inset: 0; z-index: 300;
       background: rgba(46,31,40,0.45); backdrop-filter: blur(4px);
@@ -587,6 +675,30 @@
     .victories   .lc-name { color: var(--c-vic-ink);   }
     .others      .lc-name { color: var(--c-oth-ink);   }
     .lc-date { font-family: 'Caveat', cursive; font-size: 0.78rem; color: var(--ink-light); opacity: 0.55; }
+
+    /* Pinned letters */
+    .lc.pinned {
+      border: 1.5px solid var(--gold) !important;
+      box-shadow: 0 2px 16px rgba(196,152,106,0.18), 0 2px 10px rgba(46,31,40,0.06);
+      order: -1;
+    }
+    .lc.pinned .lc-stripe {
+      background: linear-gradient(90deg, var(--gold), #E8D5B0) !important;
+    }
+    .pinned-tag {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-family: 'Caveat', cursive; font-size: 0.8rem;
+      color: var(--gold-dark, #A87840); margin-bottom: 0.4rem;
+      opacity: 0.85;
+    }
+    .pinned-wall {
+      max-width: 1060px; margin: 0 auto 0.5rem;
+    }
+    .pinned-label {
+      font-family: 'Caveat', cursive; font-size: 0.88rem;
+      color: var(--gold); letter-spacing: 0.08em; margin-bottom: 0.7rem;
+      text-align: center; opacity: 0.75;
+    }
     .back-top {
       display: none; position: fixed; bottom: 1.5rem; right: 1.2rem; z-index: 150;
       background: rgba(253,248,242,0.92); backdrop-filter: blur(8px);
@@ -652,8 +764,16 @@
       .filter-row::-webkit-scrollbar { display: none; }
       .f-btn { font-size: 0.82rem; padding: 0.32rem 0.85rem; white-space: nowrap; flex-shrink: 0; }
 
-      /* Modal */
-      .modal-body { padding: 1.4rem 1.4rem 1.6rem; }
+      /* Modals */
+      .modal-body { padding: 1.2rem 1.2rem 1.4rem; }
+      .modal-title { font-size: 1.2rem; }
+      .modal-sub { font-size: 0.82rem; }
+      .rules-letter { max-height: 90dvh; overflow-y: auto; }
+      .rules-body { padding: 1.4rem 1.4rem 1.6rem; }
+      .rules-title { font-size: 1.1rem; }
+      .rules-intro { font-size: 0.8rem; }
+      .rules-list li { font-size: 0.82rem; padding: 0.5rem 0; }
+      .rules-outro { font-size: 0.78rem; }
     }
 
     @media (min-width: 601px) and (max-width: 900px) {
@@ -688,6 +808,28 @@
   <span class="music-label" id="music-label">Now playing</span>
 </button>
 
+<!-- ══ RULES MODAL ══ -->
+<div class="rules-overlay" id="rules-modal" onclick="closeRules(event)">
+  <div class="rules-letter">
+    <div class="rules-flap"><div class="rules-wax">📜</div></div>
+    <div class="rules-body">
+      <p class="rules-title">A Note from the Post House</p>
+      <p class="rules-intro">The Letterberry Mail Club is a space for warmth,<br>wonder, and quiet honesty. A few gentle reminders:</p>
+      <div class="rules-divider">· · ✿ · ·</div>
+      <ul class="rules-list">
+        <li><span class="ri">🌿</span><span><strong>Keep it kind.</strong> Hate, harassment, and harmful content will be removed without notice.</span></li>
+        <li><span class="ri">🍓</span><span><strong>This is a space for memories, not promotions.</strong> Advertisements and self-promotion don't belong here.</span></li>
+        <li><span class="ri">🌸</span><span><strong>Please write in English only</strong> so every berryfolk can read and feel your words.</span></li>
+        <li><span class="ri">📌</span><span><strong>Standout letters may be featured</strong> on our community page as weekly highlights.</span></li>
+        <li><span class="ri">🧹</span><span><strong>We tidy up weekly.</strong> Spam and low-effort messages are cleared to keep the board meaningful.</span></li>
+        <li><span class="ri">💌</span><span><strong>If something feels wrong,</strong> please reach out to the admins right away.</span></li>
+      </ul>
+      <p class="rules-outro">Thank you for keeping the post house a safe and magical place,<br>dearest berryfolk. 🪶</p>
+      <button class="rules-close" onclick="closeRulesDirect()">Back to the Post House 🍓</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ SUCCESS MODAL ══ -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
   <div class="modal-letter">
@@ -697,7 +839,7 @@
       <p class="modal-sub">
         Dearest berryfolk, your words have been carefully sealed<br>
         and pinned to the post house board. Thank you for sharing<br>
-        a little piece of your heart. 🩷
+        a little piece of your heart. 🌸
       </p>
       <div class="modal-divider">· · ✿ · ·</div>
       <div class="modal-actions">
@@ -754,7 +896,7 @@
     <p class="landing-note">A place for berryfolks to leave a little warmth ✦</p>
   </div>
   <div class="page-footer"><p class="page-footer-title">The Letterberry Mail Club</p>
-    <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> for every letter left unwritten</p></div>
+    <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> · for every letter left unwritten</p></div>
 </div>
 
 <!-- ══ PAGE 2: WELCOME ══ -->
@@ -772,7 +914,7 @@
     <p class="welcome-tap">tap anywhere to continue ✦</p>
   </div>
   <div class="page-footer"><p class="page-footer-title">The Letterberry Mail Club</p>
-    <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> for every letter left unwritten</p></div>
+    <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> · for every letter left unwritten</p></div>
 </div>
 
 <!-- ══ PAGE 3: HUB ══ -->
@@ -802,9 +944,10 @@
       </div>
     </div>
     <p class="hub-rule">✦ · · · ✦ · · · ✦</p>
+    <button class="rules-btn" onclick="openRules()">📜 Post House Rules</button>
   </div>
   <div class="page-footer"><p class="page-footer-title">The Letterberry Mail Club</p>
-    <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> for every letter left unwritten</p></div>
+    <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> · for every letter left unwritten</p></div>
 </div>
 
 <!-- ══ PAGE 4: SUBMIT ══ -->
@@ -864,7 +1007,7 @@
     </div>
   </div>
   <div class="page-footer"><p class="page-footer-title">The Letterberry Mail Club</p>
-    <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> for every letter left unwritten</p></div>
+    <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> · for every letter left unwritten</p></div>
 </div>
 
 <!-- ══ PAGE 5: BOARD ══ -->
@@ -875,7 +1018,7 @@
   <div class="board-content">
     <p class="section-eyebrow" style="text-align:center;margin-bottom:0.3rem;">✦ from the berryfolks ✦</p>
     <h2 class="section-title" style="text-align:center;margin-bottom:0.3rem;">Letters from the Fields</h2>
-    <p class="section-sub" style="text-align:center;margin-bottom:1rem;">Warm words left by dearest berryfolks across Wrenberry Fields</p>
+    <p class="section-sub" style="text-align:center;margin-bottom:1rem;">Warm words left by dearest berryfolks across Wrenberry Fields 🌿</p>
     <p class="letter-count" id="letter-count" style="text-align:center; font-family:'Caveat',cursive; font-size:0.95rem; color:var(--ink-light); margin-bottom:1.4rem; opacity:0.7;"></p>
 
     <div class="filter-row">
@@ -892,12 +1035,29 @@
     </div>
   </div>
   <div class="page-footer"><p class="page-footer-title">The Letterberry Mail Club</p>
-    <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> for every letter left unwritten</p></div>
+    <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> · for every letter left unwritten</p></div>
 </div>
 
 <script>
+  /* ── CONFIG ── */
   const SUPABASE_URL  = 'https://tlpagwwdctnulmybmukg.supabase.co';
   const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRscGFnd3dkY3RudWxteWJtdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1NTUxMjIsImV4cCI6MjEwMDEzMTEyMn0.AosUNkKf4--QTY6aEn0t09JlFvdsr10KK537nCnykOE';
+  /* ── PINNED LETTERS ──────────────────────────────────────────
+     To pin a letter: go to Supabase → Table Editor → letters
+     Find the row → set the 'pinned' column to TRUE
+     To unpin: set it back to FALSE
+     Make sure your letters table has a 'pinned' column:
+       pinned  boolean  default false
+  ── HIDDEN LETTERS ────────────────────────────────────────────
+     To hide a letter: set the 'hidden' column to TRUE
+     Letter disappears from board but stays safe in the database
+     To restore: set it back to FALSE
+     Make sure your letters table has a 'hidden' column:
+       hidden  boolean  default false
+     SQL to add both columns at once:
+       alter table letters add column if not exists pinned boolean default false;
+       alter table letters add column if not exists hidden boolean default false;
+  ─────────────────────────────────────────────────────────────── */
   const H = {
     'Content-Type':  'application/json',
     'apikey':        SUPABASE_ANON,
@@ -988,6 +1148,11 @@
   }
   function goHome() { goTo('page-hub'); }
 
+  /* ── Rules modal ── */
+  function openRules() { document.getElementById('rules-modal').classList.add('show'); }
+  function closeRules(e) { if (e.target === document.getElementById('rules-modal')) closeRulesDirect(); }
+  function closeRulesDirect() { document.getElementById('rules-modal').classList.remove('show'); }
+
   /* ── Modal ── */
   function showModal() { document.getElementById('modal').classList.add('show'); }
   function closeModal(e) { if (e.target === document.getElementById('modal')) closeModalDirect(); }
@@ -1033,7 +1198,7 @@
   async function loadLetters() {
     document.getElementById('wall').innerHTML = '<div class="board-empty">🍓 Fetching letters from the post house…</div>';
     try {
-      const r = await fetch(`${SUPABASE_URL}/rest/v1/letters?select=*&order=created_at.desc&limit=500`, { headers: H });
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/letters?select=*&order=created_at.desc&limit=500&hidden=eq.false`, { headers: H });
       ALL = await r.json();
       render();
     } catch {
@@ -1043,12 +1208,15 @@
   function render() {
     const wall = document.getElementById('wall');
     const list = FILT === 'all' ? ALL : ALL.filter(l => l.category === FILT);
-    // Update count
+
+    // Update count (exclude pinned from count display)
     const countEl = document.getElementById('letter-count');
     if (countEl) {
-      if (ALL.length > 0) countEl.textContent = ALL.length === 1 ? '1 letter from the fields 🌿' : ALL.length + ' letters from the fields 🌿';
+      const total = ALL.filter(l => !l.pinned).length;
+      if (total > 0) countEl.textContent = total === 1 ? '1 letter from the fields 🌿' : total + ' letters from the fields 🌿';
       else countEl.textContent = '';
     }
+
     if (!list.length) {
       wall.innerHTML = `<div class="board-empty">
         <span class="board-empty-icon">📭</span>
@@ -1057,16 +1225,39 @@
       </div>`;
       return;
     }
-    wall.innerHTML = list.map(l => {
+
+    const pinned   = list.filter(l => l.pinned);
+    const unpinned = list.filter(l => !l.pinned);
+
+    const makeCard = (l, isPinned) => {
       const cls = catCls(l.category);
-      return `<div class="lc ${cls}"><div class="lc-stripe"></div><div class="lc-body">
-        <span class="lc-tag">${esc(l.category)}</span>
-        <div class="lc-msg">${esc(l.message)}</div>
-        <div class="lc-footer">
-          <span class="lc-name">— ${esc(l.pen_name)}</span>
-          <span class="lc-date">${fmt(l.created_at)}</span>
-        </div></div></div>`;
-    }).join('');
+      return `<div class="lc ${cls}${isPinned ? ' pinned' : ''}">
+        <div class="lc-stripe"></div>
+        <div class="lc-body">
+          ${isPinned ? '<span class="pinned-tag">📌 pinned</span>' : ''}
+          <span class="lc-tag">${esc(l.category)}</span>
+          <div class="lc-msg">${esc(l.message)}</div>
+          <div class="lc-footer">
+            <span class="lc-name">— ${esc(l.pen_name)}</span>
+            <span class="lc-date">${fmt(l.created_at)}</span>
+          </div>
+        </div>
+      </div>`;
+    };
+
+    let html = '';
+
+    // Pinned section at top
+    if (pinned.length > 0) {
+      html += `<div class="pinned-wall">
+        <p class="pinned-label">✦ · pinned letters · ✦</p>
+        <div class="letters-wall">${pinned.map(l => makeCard(l, true)).join('')}</div>
+      </div>
+      <div style="max-width:1060px;margin:1.2rem auto 1rem;border-top:1px solid var(--cream-deep);"></div>`;
+    }
+
+    html += `<div class="letters-wall">${unpinned.map(l => makeCard(l, false)).join('')}</div>`;
+    wall.innerHTML = html;
   }
   function filter(cat, btn) {
     FILT = cat;
@@ -1082,7 +1273,12 @@
     if (c.includes('Small Victories')) return 'victories';
     return 'others';
   }
-  function fmt(iso) { return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }); }
+  function fmt(iso) {
+    const d = new Date(iso);
+    const date = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    const time = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+    return date + ' · ' + time;
+  }
   function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function toast(id) {
     document.getElementById(id)?.classList.add('show');
