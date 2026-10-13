@@ -1,0 +1,17 @@
+{
+  "name": "letterberry-api",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Cloudflare Worker that proxies the Letterberry letters table on Neon Postgres.",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.2.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.150.0"
+  }
+}

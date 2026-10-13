@@ -1,0 +1,12 @@
+name = "letterberry-api"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# DATABASE_URL is a secret, not a var — set it with:
+#   wrangler secret put DATABASE_URL
+#
+# ALLOWED_ORIGIN is the site origin allowed to call this API (CORS).
+# Set it as a secret or var once you know where the site is hosted, e.g.:
+#   wrangler secret put ALLOWED_ORIGIN
+# (or add it under [vars] below if it's not sensitive)
