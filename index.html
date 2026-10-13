@@ -523,11 +523,12 @@
     }
     .rules-overlay.show { display: flex; }
     .rules-letter {
-      background: #FFFCF7; border-radius: 4px 4px 14px 14px;
+      background: #FFFCF7; border: 1.5px dashed var(--blush); border-radius: 3px;
       max-width: 460px; width: 100%;
       box-shadow: 0 20px 60px rgba(46,31,40,0.2);
-      overflow: hidden; animation: modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      animation: modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
       position: relative;
+      clip-path: polygon(0% 0%, 100% 0%, 100% 97%, 94% 100%, 88% 96%, 82% 100%, 76% 96%, 70% 100%, 64% 96%, 58% 100%, 52% 96%, 46% 100%, 40% 96%, 34% 100%, 28% 96%, 22% 100%, 16% 96%, 10% 100%, 4% 96%, 0% 100%);
     }
     .rules-letter::after {
       content: '';
@@ -535,43 +536,32 @@
       background-image: var(--grain);
       background-size: 200px 200px; opacity: 0.045; mix-blend-mode: multiply;
     }
-    .rules-flap {
-      height: 48px; background: var(--blush);
-      display: flex; align-items: center; justify-content: center;
-      position: relative; z-index: 1;
-    }
-    .rules-flap::before {
-      content: ''; position: absolute; inset: 0;
-      background-image: var(--grain); background-size: 150px 150px;
-      opacity: 0.08; mix-blend-mode: multiply;
-    }
-    .rules-wax {
-      width: 30px; height: 30px; border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, var(--rose), var(--rose-deep));
-      box-shadow: 0 2px 8px rgba(168,90,115,0.4);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.85rem; z-index: 1;
-    }
-    .rules-body { padding: 1.8rem 2rem 2rem; position: relative; z-index: 1; }
+    .rules-body { padding: 2.4rem 2rem 2.6rem; position: relative; z-index: 1; }
     .rules-title {
       font-family: 'Fraunces', serif; font-style: italic;
-      font-size: 1.25rem; color: var(--rose); text-align: center; margin-bottom: 0.4rem;
+      font-size: 1.35rem; color: var(--ink); text-align: center; margin-bottom: 0.5rem;
     }
     .rules-intro {
       font-family: 'Petrona', serif; font-style: italic;
       font-size: 0.84rem; color: var(--ink-mid); text-align: center;
-      line-height: 1.7; margin-bottom: 1.4rem;
+      line-height: 1.7; margin-bottom: 1.3rem;
     }
-    .rules-divider { text-align: center; font-size: 0.9rem; color: var(--blush); letter-spacing: 0.4rem; margin-bottom: 1.2rem; }
-    .rules-list { list-style: none; margin-bottom: 1.6rem; }
+    .rules-divider { display: flex; align-items: center; gap: 0.8rem; margin: 0 auto 1.3rem; width: fit-content; }
+    .rules-divider::before,
+    .rules-divider::after { content: ''; display: block; width: 36px; height: 0; border-top: 1px dashed var(--gold); }
+    .rules-list { list-style: none; margin-bottom: 1.5rem; }
     .rules-list li {
       font-family: 'Petrona', serif; font-size: 0.86rem;
       color: var(--ink-mid); line-height: 1.7;
-      padding: 0.6rem 0; border-bottom: 1px solid var(--cream-deep);
-      display: flex; gap: 0.7rem; align-items: flex-start;
+      padding: 0.65rem 0; border-bottom: 1px dashed var(--cream-deep);
+      display: flex; gap: 0.8rem; align-items: flex-start;
     }
     .rules-list li:last-child { border-bottom: none; }
-    .rules-list li span.ri { flex-shrink: 0; font-size: 1rem; margin-top: 0.05rem; }
+    .rules-list li span.ri {
+      flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+      background: var(--cream-mid); color: var(--rose-deep);
+      display: flex; align-items: center; justify-content: center; margin-top: 0.1rem;
+    }
     .rules-outro {
       font-family: 'Petrona', serif; font-style: italic;
       font-size: 0.82rem; color: var(--ink-light);
@@ -580,7 +570,7 @@
     .rules-close {
       display: block; width: 100%; padding: 0.8rem; position: relative; overflow: hidden;
       background: var(--rose);
-      color: var(--cream); font-family: 'Beth Ellen', cursive; font-size: 1.15rem;
+      color: var(--cream); font-family: 'Beth Ellen', cursive; font-size: 1.2rem;
       border: 2px dashed rgba(253,248,242,0.5); border-radius: 50px; cursor: pointer;
       box-shadow: 0 4px 16px rgba(168,90,115,0.3);
       transition: transform 0.25s var(--ease), background 0.25s var(--ease);
@@ -601,11 +591,12 @@
     }
     .modal-overlay.show { display: flex; }
     .modal-letter {
-      background: #FFFCF7; border-radius: 4px 4px 12px 12px;
+      background: #FFFCF7; border: 1.5px dashed var(--lavender); border-radius: 3px;
       max-width: 400px; width: 100%;
       box-shadow: 0 20px 60px rgba(46,31,40,0.2);
-      overflow: hidden; animation: modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      animation: modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
       position: relative;
+      clip-path: polygon(0% 0%, 100% 0%, 100% 97%, 94% 100%, 88% 96%, 82% 100%, 76% 96%, 70% 100%, 64% 96%, 58% 100%, 52% 96%, 46% 100%, 40% 96%, 34% 100%, 28% 96%, 22% 100%, 16% 96%, 10% 100%, 4% 96%, 0% 100%);
     }
     .modal-letter::after {
       content: '';
@@ -615,7 +606,6 @@
       opacity: 0.045; mix-blend-mode: multiply;
     }
     .modal-body { position: relative; z-index: 1; }
-    .modal-flap { position: relative; z-index: 1; }
     @keyframes modalIn {
       from { opacity: 0; transform: scale(0.92) translateY(14px); }
       to   { opacity: 1; transform: none; }
@@ -626,31 +616,23 @@
     }
     .modal-overlay.closing .modal-letter,
     .rules-overlay.closing .rules-letter { animation: modalOut 0.22s var(--ease) forwards; }
-    .modal-flap {
-      height: 48px; background: var(--blush);
-      display: flex; align-items: center; justify-content: center; position: relative;
-    }
-    .modal-flap::before {
-      content: ''; position: absolute; inset: 0;
-      background-image: var(--grain); background-size: 150px 150px;
-      opacity: 0.08; mix-blend-mode: multiply;
-    }
-    .modal-wax {
-      width: 30px; height: 30px; border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, var(--rose), var(--rose-deep));
+    .modal-seal {
+      width: 44px; height: 44px; margin: 0 auto 1rem; border-radius: 50%;
+      background: var(--rose); display: flex; align-items: center; justify-content: center;
       box-shadow: 0 2px 8px rgba(168,90,115,0.4);
-      display: flex; align-items: center; justify-content: center; font-size: 0.85rem; z-index: 1;
     }
-    .modal-body { padding: 1.8rem 2rem 2rem; text-align: center; }
+    .modal-body { padding: 2.4rem 2rem 2.6rem; text-align: center; }
     .modal-title {
       font-family: 'Fraunces', serif; font-style: italic;
-      font-size: 1.4rem; color: var(--rose); margin-bottom: 0.5rem;
+      font-size: 1.4rem; color: var(--ink); margin-bottom: 0.5rem;
     }
     .modal-sub {
       font-family: 'Petrona', serif; font-style: italic;
       font-size: 0.88rem; color: var(--ink-mid); line-height: 1.7; margin-bottom: 1.6rem;
     }
-    .modal-divider { font-size: 1rem; color: var(--blush); letter-spacing: 0.5rem; margin-bottom: 1.4rem; }
+    .modal-divider { display: flex; align-items: center; gap: 0.8rem; margin: 0 auto 1.4rem; width: fit-content; }
+    .modal-divider::before,
+    .modal-divider::after { content: ''; display: block; width: 36px; height: 0; border-top: 1px dashed var(--gold); }
     .modal-actions { display: flex; gap: 0.8rem; flex-direction: column; }
     .modal-btn-primary {
       display: block; width: 100%; padding: 0.85rem; position: relative; overflow: hidden;
@@ -897,11 +879,14 @@
       .f-btn { font-size: 0.82rem; padding: 0.32rem 0.85rem; white-space: nowrap; flex-shrink: 0; }
 
       /* Modals */
-      .modal-body { padding: 1.2rem 1.2rem 1.4rem; }
+      .modal-body { padding: 1.8rem 1.2rem 1.9rem; }
       .modal-title { font-size: 1.2rem; }
       .modal-sub { font-size: 0.82rem; }
       .rules-letter { max-height: 90dvh; overflow-y: auto; }
-      .rules-body { padding: 1.4rem 1.4rem 1.6rem; }
+      .rules-body { padding: 2rem 1.4rem 2.1rem; }
+      .letterhead-mark { width: 38px; height: 38px; top: 0.8rem; right: 0.8rem; }
+      .letterhead-mark span { font-size: 0.36rem; }
+      .washi { width: 54px; height: 20px; }
       .rules-title { font-size: 1.1rem; }
       .rules-intro { font-size: 0.8rem; }
       .rules-list li { font-size: 0.82rem; padding: 0.5rem 0; }
@@ -945,21 +930,23 @@
 <!-- ══ RULES MODAL ══ -->
 <div class="rules-overlay" id="rules-modal" onclick="closeRules(event)">
   <div class="rules-letter">
-    <div class="rules-flap"><div class="rules-wax"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--cream)" stroke-width="1.6" stroke-linecap="round"><path d="M4 7a2 2 0 1 1 4 0v10a2 2 0 1 0 4 0V7"/><path d="M16 7a2 2 0 1 1 4 0v10a2 2 0 1 1-4 0V7"/><path d="M8 7h8"/></svg></div></div>
+    <span class="washi"></span>
+    <div class="letterhead-mark"><span>RULES<br>&middot;WF&middot;</span></div>
     <div class="rules-body">
-      <p class="rules-title">A Note from the Post House</p>
+      <p class="landing-eyebrow" style="margin-bottom:0.6rem;text-align:center;">a note from the post house</p>
+      <p class="rules-title">House Rules</p>
       <p class="rules-intro">The Letterberry Mail Club is a space for warmth,<br>wonder, and quiet honesty. A few gentle reminders:</p>
-      <div class="rules-divider">· · ✿ · ·</div>
+      <div class="rules-divider"></div>
       <ul class="rules-list">
-        <li><span class="ri">🌿</span><span><strong>Keep it kind.</strong> Hate, harassment, and harmful content will be removed without notice.</span></li>
-        <li><span class="ri">🍓</span><span><strong>This is a space for memories, not promotions.</strong> Advertisements and self-promotion don't belong here.</span></li>
-        <li><span class="ri">🌸</span><span><strong>Please write in English only</strong> so every berryfolk can read and feel your words.</span></li>
-        <li><span class="ri">📌</span><span><strong>Standout letters may be featured</strong> on our community page as weekly highlights.</span></li>
-        <li><span class="ri">🧹</span><span><strong>We tidy up weekly.</strong> Spam and low-effort messages are cleared to keep the board meaningful.</span></li>
-        <li><span class="ri">💌</span><span><strong>If something feels wrong,</strong> please reach out to the admins right away.</span></li>
+        <li><span class="ri"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.3-9A5 5 0 0 1 12 6a5 5 0 0 1 9.3 5c-2.3 4.6-9.3 9-9.3 9Z"/></svg></span><span><strong>Keep it kind.</strong> Hate, harassment, and harmful content will be removed without notice.</span></li>
+        <li><span class="ri"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C10 4 4 10 4 18c8 0 14-6 14-14Z"/><path d="M8 18 20 4"/></svg></span><span><strong>This is a space for memories, not promotions.</strong> Advertisements and self-promotion don't belong here.</span></li>
+        <li><span class="ri"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span><strong>Please write in English only</strong> so every berryfolk can read and feel your words.</span></li>
+        <li><span class="ri"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" stroke="none"><path d="M12 2a5 5 0 0 0-5 5c0 3.5 5 10 5 10s5-6.5 5-10a5 5 0 0 0-5-5Zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg></span><span><strong>Standout letters may be featured</strong> on our community page as weekly highlights.</span></li>
+        <li><span class="ri"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/></svg></span><span><strong>We tidy up weekly.</strong> Spam and low-effort messages are cleared to keep the board meaningful.</span></li>
+        <li><span class="ri"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span><strong>If something feels wrong,</strong> please reach out to the admins right away.</span></li>
       </ul>
       <p class="rules-outro">Thank you for keeping the post house warm and safe<br>for everyone who writes here. 🪶</p>
-      <button class="rules-close" onclick="closeRulesDirect()">Back to the Post House 🍓</button>
+      <button class="rules-close" onclick="closeRulesDirect()">Back to the Post House</button>
     </div>
   </div>
 </div>
@@ -967,18 +954,19 @@
 <!-- ══ SUCCESS MODAL ══ -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
   <div class="modal-letter">
-    <div class="modal-flap"><div class="modal-wax"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--cream)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div></div>
+    <span class="washi"></span>
     <div class="modal-body">
+      <div class="modal-seal"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--cream)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
       <p class="modal-title">Sent.</p>
       <p class="modal-sub">
         Your words have been carefully sealed and pinned<br>
         to the post house board. Thank you for sharing<br>
         a little piece of your heart. 🌸
       </p>
-      <div class="modal-divider">· · ✿ · ·</div>
+      <div class="modal-divider"></div>
       <div class="modal-actions">
         <button class="modal-btn-primary" onclick="goTo('page-board'); closeModalDirect()">
-          📬 Visit the Post House Board
+          Visit the Post House Board
         </button>
         <button class="modal-btn-secondary" onclick="closeModalDirect()">
           Stay &amp; write another letter
@@ -1137,7 +1125,7 @@
           </label>
         </div>
 
-        <button class="seal-btn" id="send-btn" onclick="submitLetter()">💌 Seal &amp; Send</button>
+        <button class="seal-btn" id="send-btn" onclick="submitLetter()">Seal &amp; Send</button>
 
         <div class="toast err" id="t-err">That one didn't make it through — try sending again.</div>
         <div class="toast err" id="t-pledge">The kindness pledge needs checking first.</div>
@@ -1317,7 +1305,7 @@
     if (!message)  { toast('t-msg');    return; }
 
     btn.disabled = true;
-    btn.textContent = '💌 Sealing your letter…';
+    btn.textContent = 'Sealing your letter…';
 
     try {
       const r = await fetch(`${SUPABASE_URL}/rest/v1/letters`, {
@@ -1334,7 +1322,7 @@
       toast('t-err');
     } finally {
       btn.disabled = false;
-      btn.innerHTML = '💌 Seal &amp; Send';
+      btn.innerHTML = 'Seal &amp; Send';
     }
   }
 
