@@ -403,7 +403,11 @@
     input[type="text"]:focus, textarea:focus {
       border-color: var(--rose); box-shadow: 0 0 0 3px rgba(204,122,147,0.12); background: #FFFCF7;
     }
-    textarea { resize: vertical; min-height: 120px; line-height: 1.8; }
+    textarea {
+      resize: vertical; min-height: 120px; line-height: 1.8;
+      background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(1.8em - 1px), rgba(46,31,40,0.1) calc(1.8em - 1px), rgba(46,31,40,0.1) 1.8em);
+      background-position: 0 2.55rem; background-attachment: local;
+    }
 
     .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
     .cat-radio { display: none; }
@@ -423,14 +427,14 @@
     .cat-span2 { grid-column: span 2; justify-content: center; }
 
     .pledge {
-      display: flex; align-items: flex-start; gap: 0.7rem;
+      display: flex; align-items: flex-start; gap: 0.7rem; cursor: pointer;
       background: var(--lilac); border-radius: 10px; padding: 0.85rem 0.95rem;
     }
     .pledge input[type="checkbox"] {
       width: 16px; height: 16px; margin-top: 3px;
       accent-color: var(--rose); flex-shrink: 0; cursor: pointer;
     }
-    .pledge p { font-family: 'Lora', serif; font-style: italic; font-size: 0.84rem; color: var(--ink-mid); line-height: 1.65; }
+    .pledge p { font-family: 'Special Elite', monospace; font-size: 0.74rem; color: var(--ink-mid); line-height: 1.7; letter-spacing: 0.01em; }
 
     .seal-btn {
       display: block; width: 100%; margin-top: 1.4rem; padding: 0.9rem;
@@ -658,73 +662,79 @@
 
     .letters-wall { columns: 3 230px; gap: 1rem; max-width: 1060px; margin: 0 auto; }
     .lc {
-      break-inside: avoid; margin-bottom: 1rem; border-radius: 10px; overflow: hidden;
-      box-shadow: 0 2px 10px rgba(46,31,40,0.06); transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease);
-      position: relative;
+      break-inside: avoid; margin-bottom: 1rem; border-radius: 4px; overflow: hidden;
+      background: #FFFCF7;
+      box-shadow: 0 2px 10px rgba(46,31,40,0.07); transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease);
+      position: relative; border-left: 3px solid var(--ink-light);
       animation: cardIn 0.5s var(--ease) backwards;
     }
     @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
     .lc:nth-of-type(odd)  { transform: rotate(-0.4deg); }
     .lc:nth-of-type(even) { transform: rotate(0.5deg); }
-    .lc:hover { transform: translateY(-4px) rotate(0deg) !important; box-shadow: 0 10px 26px rgba(46,31,40,0.11); }
+    .lc:hover { transform: translateY(-4px) rotate(0deg) !important; box-shadow: 0 10px 26px rgba(46,31,40,0.12); }
+
+    .lc.confession  { border-left-color: var(--c-conf-top);  }
+    .lc.memory      { border-left-color: var(--c-mem-top);   }
+    .lc.question    { border-left-color: var(--c-quest-top); }
+    .lc.victories   { border-left-color: var(--c-vic-top);   }
+    .lc.others      { border-left-color: var(--c-oth-top);   }
 
     /* Parchment texture overlay */
     .lc::after {
       content: '';
       position: absolute; inset: 0;
-      border-radius: 10px;
       background-image: var(--grain);
       background-size: 180px 180px;
-      opacity: 0.055;
+      opacity: 0.05;
       mix-blend-mode: multiply;
       pointer-events: none;
       z-index: 2;
     }
 
-    /* Subtle vignette edge darkening for aged paper feel */
-    .lc-body { position: relative; z-index: 1; }
+    .lc-body {
+      position: relative; z-index: 1; padding: 1.2rem 1.2rem 0.9rem;
+      background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 26px, rgba(46,31,40,0.045) 27px);
+      background-position: 0 2.6rem;
+    }
 
-    .lc-stripe { height: 5px; position: relative; z-index: 1; }
-    .lc.confession  { background: var(--c-conf-bg); }
-    .lc.memory      { background: var(--c-mem-bg);  }
-    .lc.question    { background: var(--c-quest-bg);}
-    .lc.victories   { background: var(--c-vic-bg);  }
-    .lc.others      { background: var(--c-oth-bg);  }
-    .lc.confession  .lc-stripe { background: var(--c-conf-top);  }
-    .lc.memory      .lc-stripe { background: var(--c-mem-top);   }
-    .lc.question    .lc-stripe { background: var(--c-quest-top); }
-    .lc.victories   .lc-stripe { background: var(--c-vic-top);   }
-    .lc.others      .lc-stripe { background: var(--c-oth-top);   }
-    .lc-body { padding: 1.1rem 1.2rem 0.9rem; }
+    /* Postmark — sits over the top-right corner of every letter */
+    .postmark {
+      position: absolute; top: 0.65rem; right: 0.7rem; z-index: 3;
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 1.3px dashed var(--ink-light); opacity: 0.6;
+      transform: rotate(-10deg);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; pointer-events: none;
+    }
+    .postmark-date {
+      font-family: 'Special Elite', monospace; font-size: 0.42rem;
+      line-height: 1.15; color: var(--ink-light); letter-spacing: 0.01em;
+    }
+
     .lc-tag {
-      font-family: 'Special Elite', monospace; font-size: 0.64rem;
+      font-family: 'Special Elite', monospace; font-size: 0.62rem;
       letter-spacing: 0.08em; text-transform: uppercase;
-      margin-bottom: 0.6rem; opacity: 0.65; display: inline-block;
+      margin-bottom: 0.55rem; display: inline-block;
       padding: 0.15rem 0.5rem; border: 1px dashed currentColor; border-radius: 3px;
+      opacity: 0.8;
     }
     .confession  .lc-tag { color: var(--c-conf-ink);  }
     .memory      .lc-tag { color: var(--c-mem-ink);   }
     .question    .lc-tag { color: var(--c-quest-ink); }
     .victories   .lc-tag { color: var(--c-vic-ink);   }
     .others      .lc-tag { color: var(--c-oth-ink);   }
-    .lc-msg { font-family: 'Lora', serif; font-size: 0.9rem; line-height: 1.78; color: var(--ink); margin-bottom: 0.85rem; }
-    .lc-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(46,31,40,0.07); padding-top: 0.55rem; }
-    .lc-name { font-family: 'Caveat', cursive; font-size: 0.93rem; font-weight: 600; }
-    .confession  .lc-name { color: var(--c-conf-ink);  }
-    .memory      .lc-name { color: var(--c-mem-ink);   }
-    .question    .lc-name { color: var(--c-quest-ink); }
-    .victories   .lc-name { color: var(--c-vic-ink);   }
-    .others      .lc-name { color: var(--c-oth-ink);   }
-    .lc-date { font-family: 'Special Elite', monospace; font-size: 0.68rem; color: var(--ink-light); opacity: 0.6; letter-spacing: 0.02em; }
-
+    .lc-code {
+      font-family: 'Special Elite', monospace; font-size: 0.6rem;
+      color: var(--ink-light); opacity: 0.55; letter-spacing: 0.05em;
+      margin-left: 0.5rem;
+    }
+    .lc-msg { font-family: 'Lora', serif; font-size: 0.9rem; line-height: 1.85; color: var(--ink); margin-bottom: 0.85rem; max-width: 93%; }
+    .lc-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed rgba(46,31,40,0.15); padding-top: 0.55rem; }
+    .lc-name { font-family: 'Caveat', cursive; font-size: 0.95rem; font-weight: 600; color: var(--ink-mid); }
     /* Pinned letters */
     .lc.pinned {
-      border: 1.5px solid var(--gold) !important;
-      box-shadow: 0 2px 16px rgba(196,152,106,0.18), 0 2px 10px rgba(46,31,40,0.06);
-      order: -1;
-    }
-    .lc.pinned .lc-stripe {
-      background: var(--gold) !important;
+      box-shadow: 0 2px 16px rgba(196,152,106,0.2), 0 2px 10px rgba(46,31,40,0.07);
+      order: -1; border-left-color: var(--gold) !important;
     }
     .pinned-tag {
       display: inline-flex; align-items: center; gap: 0.3rem;
@@ -798,6 +808,11 @@
       /* Board */
       .letters-wall { columns: 1; }
       .board-content { padding: 1.8rem 0.9rem 2rem; }
+      .postmark { width: 38px; height: 38px; top: 0.55rem; right: 0.6rem; }
+      .postmark-date { font-size: 0.4rem; }
+
+      /* Larger tap targets on touch */
+      .home-btn, .back-top { width: 44px; height: 44px; }
       .filter-row {
         flex-wrap: nowrap; justify-content: flex-start;
         overflow-x: auto; padding-bottom: 0.4rem;
@@ -1035,10 +1050,10 @@
         </div>
 
         <div class="form-group">
-          <div class="pledge">
+          <label class="pledge" for="pledge">
             <input type="checkbox" id="pledge" />
             <p>I promise this letter carries only kindness — no hate, no harm, only warmth and wonder. 🌸</p>
-          </div>
+          </label>
         </div>
 
         <button class="seal-btn" id="send-btn" onclick="submitLetter()">💌 Seal &amp; Send</button>
@@ -1282,14 +1297,14 @@
       const cls = catCls(l.category);
       const delay = Math.min(i, 10) * 0.045;
       return `<div class="lc ${cls}${isPinned ? ' pinned' : ''}" style="animation-delay:${delay}s">
-        <div class="lc-stripe"></div>
+        <div class="postmark"><span class="postmark-date">${postmarkDate(l.created_at)}</span></div>
         <div class="lc-body">
           ${isPinned ? '<span class="pinned-tag">📌 pinned</span>' : ''}
           <span class="lc-tag">${esc(l.category)}</span>
           <div class="lc-msg">${esc(l.message)}</div>
           <div class="lc-footer">
             <span class="lc-name">— ${esc(l.pen_name)}</span>
-            <span class="lc-date">${fmt(l.created_at)}</span>
+            <span class="lc-code">${sortCode(l, cls)}</span>
           </div>
         </div>
       </div>`;
@@ -1328,6 +1343,18 @@
     const date = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
     const time = d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
     return date + ' · ' + time;
+  }
+  function postmarkDate(iso) {
+    const d = new Date(iso);
+    const mon = d.toLocaleDateString('en-US', { month:'short' }).toUpperCase();
+    const day = d.getDate();
+    const yr  = String(d.getFullYear()).slice(-2);
+    return `${mon} ${day}<br>&prime;${yr}`;
+  }
+  const SORT_PREFIX = { confession:'CN', memory:'MM', question:'QS', victories:'VC', others:'OT' };
+  function sortCode(l, cls) {
+    const n = String(l.id ?? 0).padStart(4, '0').slice(-4);
+    return `WF-${SORT_PREFIX[cls] || 'OT'}-${n}`;
   }
   function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function toast(id) {
