@@ -1179,30 +1179,22 @@
 </div>
 
 <script>
-  /* ── CONFIG ── */
-  const SUPABASE_URL  = 'https://tlpagwwdctnulmybmukg.supabase.co';
-  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRscGFnd3dkY3RudWxteWJtdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1NTUxMjIsImV4cCI6MjEwMDEzMTEyMn0.AosUNkKf4--QTY6aEn0t09JlFvdsr10KK537nCnykOE';
-  /* ── PINNED LETTERS ──────────────────────────────────────────
-     To pin a letter: go to Supabase → Table Editor → letters
-     Find the row → set the 'pinned' column to TRUE
-     To unpin: set it back to FALSE
-     Make sure your letters table has a 'pinned' column:
-       pinned  boolean  default false
-  ── HIDDEN LETTERS ────────────────────────────────────────────
-     To hide a letter: set the 'hidden' column to TRUE
-     Letter disappears from board but stays safe in the database
-     To restore: set it back to FALSE
-     Make sure your letters table has a 'hidden' column:
-       hidden  boolean  default false
-     SQL to add both columns at once:
-       alter table letters add column if not exists pinned boolean default false;
-       alter table letters add column if not exists hidden boolean default false;
+  /* ── CONFIG ──────────────────────────────────────────────────
+     API_BASE points at the Cloudflare Worker that proxies Neon
+     Postgres (see /worker in the repo). Replace with your deployed
+     Worker URL, e.g. https://letterberry-api.<you>.workers.dev
+  ── PINNED LETTERS ─────────────────────────────────────────────
+     To pin a letter: open the Neon SQL editor and run
+       update letters set pinned = true where id = <id>;
+     To unpin: set pinned = false.
+  ── HIDDEN LETTERS ─────────────────────────────────────────────
+     To hide a letter from the board without deleting it:
+       update letters set hidden = true where id = <id>;
+     To restore it: set hidden = false.
+     (Table schema lives in /worker/schema.sql)
   ─────────────────────────────────────────────────────────────── */
-  const H = {
-    'Content-Type':  'application/json',
-    'apikey':        SUPABASE_ANON,
-    'Authorization': `Bearer ${SUPABASE_ANON}`,
-  };
+  const API_BASE = 'https://letterberry-api.YOUR-SUBDOMAIN.workers.dev';
+  const H = { 'Content-Type': 'application/json' };
 
   /* ── Particles ── */
   const COLORS = ['#F0BEC9','#C4B0D6','#F5E6C8','#D4E6D0','#C4986A'];
@@ -1320,7 +1312,7 @@
     btn.textContent = '💌 Sealing your letter…';
 
     try {
-      const r = await fetch(`${SUPABASE_URL}/rest/v1/letters`, {
+      const r = await fetch(`${API_BASE}/letters`, {
         method: 'POST', headers: H,
         body: JSON.stringify({ pen_name: penName, category, message }),
       });
@@ -1346,7 +1338,7 @@
   async function loadLetters() {
     document.getElementById('wall').innerHTML = `<div class="letters-wall">${skeletonCard().repeat(6)}</div>`;
     try {
-      const r = await fetch(`${SUPABASE_URL}/rest/v1/letters?select=*&order=created_at.desc&limit=500&hidden=eq.false`, { headers: H });
+      const r = await fetch(`${API_BASE}/letters`, { headers: H });
       ALL = await r.json();
       render();
     } catch {
