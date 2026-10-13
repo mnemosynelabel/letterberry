@@ -66,7 +66,7 @@
       border: 1.5px solid var(--blush); border-radius: 50%;
       width: 40px; height: 40px;
       display: none; align-items: center; justify-content: center;
-      font-size: 1rem; cursor: pointer;
+      font-size: 1rem; cursor: pointer; color: var(--rose);
       box-shadow: 0 2px 10px rgba(46,31,40,0.08);
       transition: transform 0.25s var(--ease);
     }
@@ -87,7 +87,7 @@
     .music-btn.visible { opacity: 1; pointer-events: all; }
     .music-btn.playing { background: var(--lilac); border-color: var(--lavender); }
     .music-btn:hover { transform: scale(1.03); }
-    .music-spin { display: inline-block; }
+    .music-spin { display: inline-flex; }
     .music-btn.playing .music-spin { animation: spin 3s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .music-label { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.82rem; }
@@ -254,62 +254,48 @@
       margin-bottom: clamp(1.5rem, 4vw, 2.5rem); max-width: 320px;
     }
 
-    /* Doors */
-    .hub-doors {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 1.2rem; max-width: 580px; width: 100%; margin: 0 auto;
+    /* Signpost */
+    .signpost { display: flex; flex-direction: column; align-items: center; max-width: 440px; width: 100%; margin: 0 auto; }
+    .signpost-post {
+      width: 5px; height: 32px; background: var(--gold); position: relative; margin-bottom: -2px;
     }
-    .door {
-      position: relative; cursor: pointer; text-align: center;
+    .signpost-post::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: var(--grain); background-size: 40px 40px; opacity: 0.2; mix-blend-mode: multiply;
+    }
+    .signpost-cap {
+      position: absolute; top: -7px; left: 50%; transform: translateX(-50%);
+      width: 15px; height: 15px; border-radius: 50%; background: var(--gold);
+      box-shadow: 0 1px 3px rgba(46,31,40,0.3);
+    }
+    .plank {
+      display: flex; align-items: center; gap: 0.9rem; width: 100%;
+      background: #FFFCF7; border: 1.5px solid var(--cream-deep);
+      padding: 1rem 1.5rem; margin-bottom: 0.9rem; text-align: left; cursor: pointer;
+      font: inherit; color: inherit;
+      box-shadow: 0 4px 14px rgba(46,31,40,0.08);
       transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
     }
-    .door-write  { transform: rotate(-0.8deg); }
-    .door-board  { transform: rotate(0.8deg) translateY(10px); }
-    .door:hover { transform: translateY(-5px) rotate(0deg); }
-    .door:hover .door-slab { box-shadow: 0 16px 40px rgba(46,31,40,0.14); }
-    .door:active { transform: scale(0.97); }
-
-    /* Arch top */
-    .door-arch {
-      width: 100%; height: 30px; position: relative; overflow: hidden;
-      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-      border: 1.5px solid var(--rose);
-      border-bottom: none;
+    .plank-a {
+      clip-path: polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%);
+      transform: rotate(-1.2deg); border-left: 4px solid var(--rose); padding-right: 2.1rem;
     }
-    .door-arch::before {
-      content: ''; position: absolute; inset: 0;
-      background-image: var(--grain); background-size: 140px 140px;
-      opacity: 0.09; mix-blend-mode: multiply;
+    .plank-b {
+      clip-path: polygon(8% 0, 100% 0, 100% 100%, 8% 100%, 0 50%);
+      transform: rotate(1.2deg); border-right: 4px solid var(--lavender); padding-left: 2.1rem;
     }
-    .door-write .door-arch { background: var(--blush); border-color: var(--rose); }
-    .door-board .door-arch { background: var(--lilac); border-color: var(--lavender); }
-
-    /* Door slab */
-    .door-slab {
-      background: #FFFCF7;
-      border: 1.5px solid var(--cream-deep);
-      border-top: none;
-      border-radius: 0 0 12px 12px;
-      padding: 1.6rem 1.4rem 1.8rem;
-      box-shadow: 0 4px 16px rgba(46,31,40,0.06);
-      transition: box-shadow 0.22s;
+    .plank:hover { transform: translateY(-3px) rotate(0deg); box-shadow: 0 10px 24px rgba(46,31,40,0.14); }
+    .plank:active { transform: scale(0.98); }
+    .plank-icon {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
     }
-    .door-write .door-slab { border-color: var(--rose); }
-    .door-board .door-slab { border-color: var(--lavender); }
-    .door-icon {
-      font-size: clamp(1.8rem, 5vw, 2.4rem);
-      display: block; margin-bottom: 0.6rem;
-      filter: drop-shadow(0 2px 4px rgba(46,31,40,0.1));
-    }
-    .door-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(0.95rem, 2.5vw, 1.15rem); color: var(--ink); margin-bottom: 0.35rem;
-    }
-    .door-desc {
-      font-family: 'Lora', serif; font-style: italic;
-      font-size: clamp(0.72rem, 1.8vw, 0.82rem); color: var(--ink-light); line-height: 1.6;
-    }
-    .hub-rule { margin-top: 1.8rem; font-family: 'Caveat', cursive; font-size: 0.88rem; color: var(--ink-light); opacity: 0.45; }
+    .plank-a .plank-icon { background: var(--blush); color: var(--rose-deep); }
+    .plank-b .plank-icon { background: var(--lilac); color: var(--ink-mid); }
+    .plank-text { display: flex; flex-direction: column; gap: 0.15rem; }
+    .plank-title { font-family: 'Playfair Display', serif; font-size: clamp(0.95rem, 2.5vw, 1.1rem); color: var(--ink); }
+    .plank-desc { font-family: 'Lora', serif; font-style: italic; font-size: clamp(0.72rem, 1.8vw, 0.78rem); color: var(--ink-light); line-height: 1.5; }
+    .hub-rule { margin-top: 0.9rem; font-family: 'Caveat', cursive; font-size: 0.88rem; color: var(--ink-light); opacity: 0.45; }
 
     /* ════════════════════
        SUBMIT
@@ -657,8 +643,10 @@
       border: 1.5px solid var(--cream-deep);
       background: var(--cream); color: var(--ink-mid);
       cursor: pointer; transition: all 0.22s var(--ease);
+      display: inline-flex; align-items: center; gap: 0.35rem;
     }
     .f-btn:hover, .f-btn.on { background: var(--blush); border-color: var(--rose); color: var(--ink); }
+    .pill-icon { flex-shrink: 0; }
 
     .letters-wall { columns: 3 230px; gap: 1rem; max-width: 1060px; margin: 0 auto; }
     .lc {
@@ -672,6 +660,12 @@
     .lc:nth-of-type(odd)  { transform: rotate(-0.4deg); }
     .lc:nth-of-type(even) { transform: rotate(0.5deg); }
     .lc:hover { transform: translateY(-4px) rotate(0deg) !important; box-shadow: 0 10px 26px rgba(46,31,40,0.12); }
+
+    /* Every third letter gets a deckled, torn-paper bottom edge */
+    .lc:nth-of-type(3n) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 93%, 95% 100%, 90% 94%, 85% 100%, 80% 94%, 75% 100%, 70% 94%, 65% 100%, 60% 94%, 55% 100%, 50% 94%, 45% 100%, 40% 94%, 35% 100%, 30% 94%, 25% 100%, 20% 94%, 15% 100%, 10% 94%, 5% 100%, 0% 94%);
+    }
+    .lc:nth-of-type(3n) .lc-body { padding-bottom: 1.5rem; }
 
     .lc.confession  { border-left-color: var(--c-conf-top);  }
     .lc.memory      { border-left-color: var(--c-mem-top);   }
@@ -714,7 +708,7 @@
     .lc-tag {
       font-family: 'Special Elite', monospace; font-size: 0.62rem;
       letter-spacing: 0.08em; text-transform: uppercase;
-      margin-bottom: 0.55rem; display: inline-block;
+      margin-bottom: 0.55rem; display: inline-flex; align-items: center; gap: 0.3rem;
       padding: 0.15rem 0.5rem; border: 1px dashed currentColor; border-radius: 3px;
       opacity: 0.8;
     }
@@ -766,7 +760,7 @@
       text-align: center; font-family: 'Caveat', cursive;
       font-size: 1.1rem; color: var(--ink-light); padding: 3rem 1rem;
     }
-    .board-empty-icon { font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.6; }
+    .board-empty-icon { display: flex; justify-content: center; margin-bottom: 1rem; opacity: 0.5; color: var(--ink-light); }
     .board-empty-title { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; color: var(--ink-mid); margin-bottom: 0.5rem; }
     .board-empty-sub { font-family: 'Lora', serif; font-style: italic; font-size: 0.88rem; color: var(--ink-light); line-height: 1.7; }
 
@@ -791,12 +785,11 @@
       /* Hub — fits without scroll */
       .hub-inner { padding: 1.2rem 1.2rem 1rem; }
       .hub-sub { margin-bottom: 1.2rem; }
-      .hub-doors { grid-template-columns: 1fr 1fr; gap: 0.8rem; max-width: 100%; }
-      .door-write, .door-board { transform: none; }
-      .door-arch { padding-bottom: 0.4rem; }
-      .door-slab { padding: 0.8rem 0.8rem 1rem; }
-      .door-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
-      .door-desc { display: none; }
+      .plank { padding: 0.8rem 1.1rem; gap: 0.6rem; }
+      .plank-a { padding-right: 1.5rem; }
+      .plank-b { padding-left: 1.5rem; }
+      .plank-icon { width: 26px; height: 26px; }
+      .plank-desc { display: none; }
       .hub-rule { margin-top: 1rem; }
 
       /* Submit */
@@ -861,16 +854,18 @@
 </svg>
 <button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
-<button class="home-btn" id="home-btn" onclick="goHome()" title="Back to the post house">🏡</button>
+<button class="home-btn" id="home-btn" onclick="goHome()" title="Back to the post house">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-9"/></svg>
+</button>
 <button class="music-btn" id="music-btn" onclick="toggleMusic()" title="Toggle music">
-  <span class="music-spin" id="music-spin">🎵</span>
+  <span class="music-spin" id="music-spin"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l10-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></span>
   <span class="music-label" id="music-label">Now playing</span>
 </button>
 
 <!-- ══ RULES MODAL ══ -->
 <div class="rules-overlay" id="rules-modal" onclick="closeRules(event)">
   <div class="rules-letter">
-    <div class="rules-flap"><div class="rules-wax">📜</div></div>
+    <div class="rules-flap"><div class="rules-wax"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--cream)" stroke-width="1.6" stroke-linecap="round"><path d="M4 7a2 2 0 1 1 4 0v10a2 2 0 1 0 4 0V7"/><path d="M16 7a2 2 0 1 1 4 0v10a2 2 0 1 1-4 0V7"/><path d="M8 7h8"/></svg></div></div>
     <div class="rules-body">
       <p class="rules-title">A Note from the Post House</p>
       <p class="rules-intro">The Letterberry Mail Club is a space for warmth,<br>wonder, and quiet honesty. A few gentle reminders:</p>
@@ -892,7 +887,7 @@
 <!-- ══ SUCCESS MODAL ══ -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
   <div class="modal-letter">
-    <div class="modal-flap"><div class="modal-wax">✉️</div></div>
+    <div class="modal-flap"><div class="modal-wax"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--cream)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div></div>
     <div class="modal-body">
       <p class="modal-title">Your letter has been sent! 🍓</p>
       <p class="modal-sub">
@@ -983,27 +978,26 @@
     <h2 class="hub-title">What brings you here today?</h2>
     <p class="hub-sub">The post house is open, dearest berryfolk. Step right in. 🪶</p>
 
-    <div class="hub-doors">
-      <div class="door door-write" onclick="goTo('page-submit')">
-        <div class="door-arch"></div>
-        <div class="door-slab">
-          <span class="door-icon">💌</span>
-          <div class="door-title">Drop a Letter</div>
-          <div class="door-desc">Leave a confession, a memory, a question, or a tiny victory.</div>
-        </div>
-      </div>
+    <div class="signpost">
+      <div class="signpost-post"><span class="signpost-cap"></span></div>
+      <button class="plank plank-a" onclick="goTo('page-submit')">
+        <span class="plank-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+        <span class="plank-text">
+          <span class="plank-title">Drop a Letter</span>
+          <span class="plank-desc">Leave a confession, a memory, a question, or a tiny victory.</span>
+        </span>
+      </button>
 
-      <div class="door door-board" onclick="goTo('page-board')">
-        <div class="door-arch"></div>
-        <div class="door-slab">
-          <span class="door-icon">📬</span>
-          <div class="door-title">Post House Board</div>
-          <div class="door-desc">Read letters from fellow berryfolks across the fields.</div>
-        </div>
-      </div>
+      <button class="plank plank-b" onclick="goTo('page-board')">
+        <span class="plank-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8"/><path d="M3 10 7 4h10l4 6"/><path d="M3 10h18"/><path d="M9 14h6"/></svg></span>
+        <span class="plank-text">
+          <span class="plank-title">Post House Board</span>
+          <span class="plank-desc">Read letters from fellow berryfolks across the fields.</span>
+        </span>
+      </button>
     </div>
     <p class="hub-rule">✦ · · · ✦ · · · ✦</p>
-    <button class="rules-btn" onclick="openRules()">📜 Post House Rules</button>
+    <button class="rules-btn" onclick="openRules()"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" style="margin-right:0.3rem;vertical-align:-2px"><path d="M4 7a2 2 0 1 1 4 0v10a2 2 0 1 0 4 0V7"/><path d="M16 7a2 2 0 1 1 4 0v10a2 2 0 1 1-4 0V7"/><path d="M8 7h8"/></svg>Post House Rules</button>
   </div>
   <div class="page-footer"><p class="page-footer-title">The Letterberry Mail Club</p>
     <p class="page-footer-sub">a place built by <strong>SCRƗVE</strong> · for every letter left unwritten</p></div>
@@ -1020,7 +1014,7 @@
     <p class="section-sub">Every letter finds its way to the board. Be kind, be soft, be you.</p>
 
     <div class="envelope">
-      <div class="envelope-flap"><div class="envelope-seal">🌸</div></div>
+      <div class="envelope-flap"><div class="envelope-seal"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--cream)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M12 9.3c-1.3-1.8-3.6-1.8-3.6 0S10.7 11 12 9.3Z"/><path d="M14.7 12c1.8-1.3 1.8-3.6 0-3.6S12.9 10.7 14.7 12Z"/><path d="M12 14.7c1.3 1.8 3.6 1.8 3.6 0S13.3 13 12 14.7Z"/><path d="M9.3 12c-1.8 1.3-1.8 3.6 0 3.6S11 13.3 9.3 12Z"/></svg></div></div>
       <div class="envelope-body">
 
         <div class="form-group">
@@ -1032,15 +1026,15 @@
           <label>✦ What kind of letter is this?</label>
           <div class="cat-grid">
             <input type="radio" name="cat" id="cat-confession" value="💌 Confession" class="cat-radio" />
-            <label for="cat-confession" class="cat-pill">💌 Confession</label>
+            <label for="cat-confession" class="cat-pill"><svg class="pill-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.3-9A5 5 0 0 1 12 6a5 5 0 0 1 9.3 5c-2.3 4.6-9.3 9-9.3 9Z"/></svg>Confession</label>
             <input type="radio" name="cat" id="cat-memory" value="🍂 Memory" class="cat-radio" />
-            <label for="cat-memory" class="cat-pill">🍂 Memory</label>
+            <label for="cat-memory" class="cat-pill"><svg class="pill-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C10 4 4 10 4 18c8 0 14-6 14-14Z"/><path d="M8 18 20 4"/></svg>Memory</label>
             <input type="radio" name="cat" id="cat-question" value="🌿 Question" class="cat-radio" />
-            <label for="cat-question" class="cat-pill">🌿 Question</label>
+            <label for="cat-question" class="cat-pill"><svg class="pill-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V11"/><path d="M12 11C12 7 9 5 5 5c0 4 3 7 7 6Z"/><path d="M12 9c0-3 2.5-5 6-5 0 3.5-2.5 6-6 5Z"/></svg>Question</label>
             <input type="radio" name="cat" id="cat-victories" value="🌟 Small Victories" class="cat-radio" />
-            <label for="cat-victories" class="cat-pill">🌟 Small Victories</label>
+            <label for="cat-victories" class="cat-pill"><svg class="pill-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L12 17l-5.6 3.1 1.4-6.3-4.8-4.3 6.4-.6Z"/></svg>Small Victories</label>
             <input type="radio" name="cat" id="cat-others" value="🍓 Others" class="cat-radio" />
-            <label for="cat-others" class="cat-pill cat-span2">🍓 Others</label>
+            <label for="cat-others" class="cat-pill cat-span2"><svg class="pill-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14.5" r="6.5"/><path d="M9 7c1-2 4-2 5 0"/></svg>Others</label>
           </div>
         </div>
 
@@ -1081,12 +1075,12 @@
     <p class="letter-count" id="letter-count" style="text-align:center; font-family:'Caveat',cursive; font-size:0.95rem; color:var(--ink-light); margin-bottom:1.4rem; opacity:0.7;"></p>
 
     <div class="filter-row">
-      <button class="f-btn on"  onclick="filter('all',this)">🌸 All</button>
-      <button class="f-btn" onclick="filter('💌 Confession',this)">💌 Confessions</button>
-      <button class="f-btn" onclick="filter('🍂 Memory',this)">🍂 Memories</button>
-      <button class="f-btn" onclick="filter('🌿 Question',this)">🌿 Questions</button>
-      <button class="f-btn" onclick="filter('🌟 Small Victories',this)">🌟 Small Victories</button>
-      <button class="f-btn" onclick="filter('🍓 Others',this)">🍓 Others</button>
+      <button class="f-btn on"  onclick="filter('all',this)">All</button>
+      <button class="f-btn" onclick="filter('💌 Confession',this)"><svg class="pill-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.3-9A5 5 0 0 1 12 6a5 5 0 0 1 9.3 5c-2.3 4.6-9.3 9-9.3 9Z"/></svg>Confessions</button>
+      <button class="f-btn" onclick="filter('🍂 Memory',this)"><svg class="pill-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C10 4 4 10 4 18c8 0 14-6 14-14Z"/><path d="M8 18 20 4"/></svg>Memories</button>
+      <button class="f-btn" onclick="filter('🌿 Question',this)"><svg class="pill-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V11"/><path d="M12 11C12 7 9 5 5 5c0 4 3 7 7 6Z"/><path d="M12 9c0-3 2.5-5 6-5 0 3.5-2.5 6-6 5Z"/></svg>Questions</button>
+      <button class="f-btn" onclick="filter('🌟 Small Victories',this)"><svg class="pill-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L12 17l-5.6 3.1 1.4-6.3-4.8-4.3 6.4-.6Z"/></svg>Small Victories</button>
+      <button class="f-btn" onclick="filter('🍓 Others',this)"><svg class="pill-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14.5" r="6.5"/><path d="M9 7c1-2 4-2 5 0"/></svg>Others</button>
     </div>
 
     <div class="letters-wall" id="wall">
@@ -1283,7 +1277,7 @@
 
     if (!list.length) {
       wall.innerHTML = `<div class="board-empty">
-        <span class="board-empty-icon">📭</span>
+        <span class="board-empty-icon"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8"/><path d="M3 10 7 4h10l4 6"/><path d="M3 10h18"/><path d="M9 14h6"/></svg></span>
         <p class="board-empty-title">No letters here yet</p>
         <p class="board-empty-sub">Be the first to leave a little warmth<br>on the post house board, dearest berryfolk. 🍓</p>
       </div>`;
@@ -1299,8 +1293,8 @@
       return `<div class="lc ${cls}${isPinned ? ' pinned' : ''}" style="animation-delay:${delay}s">
         <div class="postmark"><span class="postmark-date">${postmarkDate(l.created_at)}</span></div>
         <div class="lc-body">
-          ${isPinned ? '<span class="pinned-tag">📌 pinned</span>' : ''}
-          <span class="lc-tag">${esc(l.category)}</span>
+          ${isPinned ? `<span class="pinned-tag">${ICON.pin}pinned</span>` : ''}
+          <span class="lc-tag">${ICON[cls] || ''}${esc(categoryLabel(l.category))}</span>
           <div class="lc-msg">${esc(l.message)}</div>
           <div class="lc-footer">
             <span class="lc-name">— ${esc(l.pen_name)}</span>
@@ -1338,6 +1332,16 @@
     if (c.includes('Small Victories')) return 'victories';
     return 'others';
   }
+  function categoryLabel(c) { return (c || '').replace(/^\S+\s*/, ''); }
+  const svgIcon = (p) => `<svg class="pill-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  const ICON = {
+    confession: svgIcon('<path d="M12 20s-7-4.4-9.3-9A5 5 0 0 1 12 6a5 5 0 0 1 9.3 5c-2.3 4.6-9.3 9-9.3 9Z"/>'),
+    memory:     svgIcon('<path d="M20 4C10 4 4 10 4 18c8 0 14-6 14-14Z"/><path d="M8 18 20 4"/>'),
+    question:   svgIcon('<path d="M12 21V11"/><path d="M12 11C12 7 9 5 5 5c0 4 3 7 7 6Z"/><path d="M12 9c0-3 2.5-5 6-5 0 3.5-2.5 6-6 5Z"/>'),
+    victories:  svgIcon('<path d="m12 3 2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L12 17l-5.6 3.1 1.4-6.3-4.8-4.3 6.4-.6Z"/>'),
+    others:     svgIcon('<circle cx="12" cy="14.5" r="6.5"/><path d="M9 7c1-2 4-2 5 0"/>'),
+    pin: '<svg class="pill-icon" viewBox="0 0 24 24" width="10" height="10" fill="currentColor" stroke="none"><path d="M12 2a5 5 0 0 0-5 5c0 3.5 5 10 5 10s5-6.5 5-10a5 5 0 0 0-5-5Zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg>',
+  };
   function fmt(iso) {
     const d = new Date(iso);
     const date = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
